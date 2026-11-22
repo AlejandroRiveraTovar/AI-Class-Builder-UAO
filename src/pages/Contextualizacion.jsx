@@ -11,18 +11,14 @@ super(props);
 var p = parseInt(props.pasoInicial, 10);
 this.state = {
 paso: p >= 1 && p <= 5 ? p : 1,
-programas: ['Ingeniería Multimedia', 'Diseño de la Comunicación Gráfica'],
-nombre: 'Diseño de Interacción',
-nivel: 'Pregrado', creditos: '3', semestre: '5', semanas: '16', horas: '144', modalidad: 'Presencial',
-comp: ['Diseña interfaces interactivas centradas en las personas usuarias, con principios de usabilidad, en contextos reales.'],
-ra: ['Identifica los principios de usabilidad presentes en interfaces existentes.', 'Prototipa interfaces interactivas que responden a necesidades reales de las personas usuarias.'],
-ce: ['Coherencia entre las decisiones de diseño y las necesidades de las personas usuarias.', 'Calidad funcional del prototipo.', 'Argumentación de las decisiones tomadas.'],
-prop: ['Teoría del color y principios de composición.', 'Principios de usabilidad y diseño centrado en las personas.'],
-func: ['Bocetación de interfaces.', 'Manejo de herramientas de prototipado.'],
-axio: ['Empatía con las personas usuarias.', 'Trabajo colaborativo y ética en el diseño.'],
-presentacion: 'El curso introduce al estudiantado en el diseño de experiencias interactivas centradas en las personas. A partir de casos reales, investiga necesidades, propone soluciones y construye prototipos que evalúa con personas usuarias, con criterios de usabilidad, accesibilidad y estética.',
-aporte: 'Aporta a la competencia de diseño de soluciones interactivas del programa y prepara al estudiantado para los cursos de proyecto integrador y desarrollo de productos digitales de los semestres siguientes.',
-consiento: true, guardado: false
+programas: [],
+nombre: '',
+nivel: '', creditos: '', semestre: '', semanas: '', horas: '', modalidad: '',
+comp: [''], ra: [''], ce: [''],
+prop: [''], func: [''], axio: [''],
+presentacion: '',
+aporte: '',
+consiento: false, guardado: false
 };
 }
 renderVals() {
@@ -106,7 +102,7 @@ omitir: function () { self.setState({ paso: Math.min(5, self.state.paso + 1) });
 siguiente: function (e) {
 e.preventDefault();
 if (self.state.paso < 5) self.setState({ paso: self.state.paso + 1 });
-else if (self.state.consiento) { self.setState({ guardado: true }); window.location.href = '#/centro-diseno'; }
+else if (self.state.consiento) { window.location.href = '#/centro-diseno'; }
 },
 bloqueado: bloqueado,
 botonTexto: ultimo ? 'Guardar y continuar' : 'Continuar',
@@ -344,6 +340,9 @@ export default function Contextualizacion(props) {
                       </span>
                       {" "}
                       <select className="ctrl" value={v.creditos ?? ''} onChange={v.setCreditos}>
+                        <option value="" disabled>
+                          Selecciona los créditos
+                        </option>
                         <option value="1">
                           1 crédito
                         </option>
@@ -380,6 +379,9 @@ export default function Contextualizacion(props) {
                       </span>
                       {" "}
                       <select className="ctrl" value={v.semestre ?? ''} onChange={v.setSemestre}>
+                        <option value="" disabled>
+                          Selecciona el semestre
+                        </option>
                         <option value="1">
                           Semestre 1
                         </option>
@@ -430,6 +432,9 @@ export default function Contextualizacion(props) {
                       <div role="group" aria-labelledby="l-dur" style={sx("display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px")}>
                         {" "}
                         <select className="ctrl" aria-label="Semanas" value={v.semanas ?? ''} onChange={v.setSemanas}>
+                          <option value="" disabled>
+                            Semanas
+                          </option>
                           <option value="8">
                             8 semanas
                           </option>
@@ -442,6 +447,9 @@ export default function Contextualizacion(props) {
                         </select>
                         {" "}
                         <select className="ctrl" aria-label="Horas totales" value={v.horas ?? ''} onChange={v.setHoras}>
+                          <option value="" disabled>
+                            Horas totales
+                          </option>
                           <option value="48">
                             48 horas
                           </option>
@@ -716,7 +724,7 @@ export default function Contextualizacion(props) {
                       </b>
                     </span>
                     {" "}
-                    <textarea className="ctrl" rows="5" maxLength="1000" value={v.presentacion ?? ''} onChange={v.setPresentacion} />
+                    <textarea className="ctrl" rows="5" maxLength="1000" value={v.presentacion ?? ''} onChange={v.setPresentacion} placeholder="Por ejemplo, el curso introduce al estudiantado en el diseño de experiencias interactivas centradas en las personas…" />
                     {" "}
                     <span style={sx("display: flex; justify-content: space-between; gap: 12px")}>
                       <span className="ayuda">
@@ -738,7 +746,7 @@ export default function Contextualizacion(props) {
                       </b>
                     </span>
                     {" "}
-                    <textarea className="ctrl" rows="4" maxLength="600" value={v.aporte ?? ''} onChange={v.setAporte} />
+                    <textarea className="ctrl" rows="4" maxLength="600" value={v.aporte ?? ''} onChange={v.setAporte} placeholder="Por ejemplo, aporta a la competencia de diseño de soluciones interactivas del programa…" />
                     {" "}
                     <span style={sx("display: flex; justify-content: space-between; gap: 12px")}>
                       <span className="ayuda">
@@ -792,7 +800,7 @@ export default function Contextualizacion(props) {
                         Procesamos esta información con confidencialidad académica y solo pedimos los datos necesarios para diseñar tu trayectoria, conforme a la Ley 1581 de 2012 y a los lineamientos de ética y privacidad de la UAO.
                       </p>
                       {" "}
-                      <a href="#/politica-privacidad" style={sx("align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; font-size: 15px; font-weight: 700")}>
+                      <a href="#/politica-privacidad" target="_blank" rel="noopener noreferrer" title="Se abre en una pestaña nueva" style={sx("align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; font-size: 15px; font-weight: 700")}>
                         Leer el aviso de privacidad completo
                         <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M5 12h14"></path>
@@ -849,24 +857,6 @@ export default function Contextualizacion(props) {
                     </ul>
                     {" "}
                   </div>
-                  {" "}
-                  {v.guardado ? (
-                    <>
-                      {" "}
-                      <div role="status" style={sx("display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 20px; border-radius: 14px; background: #8A1428; color: #FBF5EC")}>
-                        {" "}
-                        <span style={sx("font-size: 16px; font-weight: 700")}>
-                          Listo. Guardamos la contextualización de{" "}{v.nombre}.
-                        </span>
-                        {" "}
-                        <a href="#/centro-diseno" style={sx("display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 16px; border-radius: 10px; background: #FBF5EC; color: #8A1428; font-size: 15px; font-weight: 700; text-decoration: none")}>
-                          Ir al Centro de diseño
-                        </a>
-                        {" "}
-                      </div>
-                      {" "}
-                    </>
-                  ) : null}
                   {" "}
                 </div>
                 {" "}

@@ -80,14 +80,6 @@ export default function RecursosPlantillas(props) {
                   ›
                 </li>
                 {" "}
-                <li>
-                  Internos CEEDi
-                </li>
-                {" "}
-                <li aria-hidden="true" style={sx("color: #A1434F")}>
-                  ›
-                </li>
-                {" "}
                 <li aria-current="page" style={sx("font-weight: 700")}>
                   Plantillas institucionales
                 </li>

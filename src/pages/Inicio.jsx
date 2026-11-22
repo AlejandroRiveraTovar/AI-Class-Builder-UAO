@@ -52,7 +52,7 @@ export default function Inicio(props) {
           {" "}
         </header>
         {" "}
-        <section id="inicio" style={sx("max-width: 1200px; margin: 0 auto; padding: 88px 24px 96px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 64px")}>
+        <section id="inicio" style={sx("max-width: 1200px; min-height: calc(100vh - 77px); box-sizing: border-box; margin: 0 auto; padding: 88px 24px 96px; display: flex; flex-wrap: wrap; align-items: center; align-content: center; justify-content: center; gap: 64px")}>
           {" "}
           <div style={sx("flex: 0 1 860px; min-width: 0; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 24px")}>
             {" "}

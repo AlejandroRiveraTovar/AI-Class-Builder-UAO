@@ -1072,7 +1072,7 @@ export default function AnaliticaGeneral(props) {
               {" "}
             </div>
             {" "}
-            <a href="#/politica-privacidad" style={sx("display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 10px; border: 1.5px solid #FBF5EC; color: #FBF5EC; font-size: 15px; font-weight: 700; text-decoration: none")}>
+            <a href="#/politica-privacidad" target="_blank" rel="noopener noreferrer" title="Se abre en una pestaña nueva" style={sx("display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 10px; border: 1.5px solid #FBF5EC; color: #FBF5EC; font-size: 15px; font-weight: 700; text-decoration: none")}>
               Política de privacidad
             </a>
             {" "}

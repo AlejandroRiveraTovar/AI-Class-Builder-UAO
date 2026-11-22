@@ -8,7 +8,7 @@ import './Chat.css';
 class Logic extends PageLogic {
 constructor(props) {
 super(props);
-this.state = { sel: 'lg', q: '', filtro: 'todas', borrador: '', estado: 'revision', extra: {}, leidos: {}, nuevos: [], crear: false, nNombre: '', nCorreo: '', nRol: 'Colaboradora CEEDi', errC: '', plegado: false, forzados: {}, eliminadas: [], eliminar: null, avisoConv: '', deshacerAccion: null };
+this.state = { sel: 'lg', q: '', filtro: 'todas', borrador: '', estado: 'revision', extra: {}, leidos: {}, nuevos: [], crear: false, nNombre: '', nCorreo: '', nRol: 'Colaboradora CEEDi', errC: '', plegado: false, forzados: {}, eliminadas: [], eliminar: null, avisoConv: '', deshacerAccion: null, detalle: null };
 }
 renderVals() {
 var self = this;
@@ -17,26 +17,26 @@ ceedi: 'background: #FF051E; color: #FFFFFF',
 prof: 'background: #FFFFFF; color: #8A1428; border: 1.5px solid #FF836C'
 };
 var chats = [
-{ id: 'lg', nombre: 'Laura Gómez', rol: 'Colaboradora CEEDi', tipo: 'ceedi', hora: '10:40 a. m.', grupo: 'Hoy', fecha: 'Hoy', nuevos: 0, tema: 'Matriz de alineación', href: '#/asistentes/diseno-microcurricular',
+{ id: 'lg', correo: 'laura.gomez@uao.edu.co', dependencia: 'Centro de Excelencia en Docencia (CEEDi)', ext: '11452', comunes: 'Diseño Web, Gestión de Proyectos', nombre: 'Laura Gómez', rol: 'Colaboradora CEEDi', tipo: 'ceedi', hora: '10:40 a. m.', grupo: 'Hoy', fecha: 'Hoy', nuevos: 0, tema: 'Matriz de alineación', href: '#/asistentes/diseno-microcurricular',
 mensajes: [
 { yo: true, hora: '10:24 a. m.', texto: 'Actualicé la matriz de alineación. Quedo atento a tus observaciones.' },
 { yo: false, hora: '10:32 a. m.', texto: 'La revisé y ajusté los criterios de evaluación. Te adjunto el documento con mis comentarios.', adjunto: 'Matriz_Alineacion_v1.1.xlsx', peso: '2,4 MB' },
 { yo: true, hora: '10:40 a. m.', texto: 'Perfecto, gracias. Voy a aplicar los cambios.' }
 ] },
-{ id: 'ar', nombre: 'Andrés Rodríguez', rol: 'Colaborador CEEDi', tipo: 'ceedi', hora: '9:15 a. m.', grupo: 'Hoy', fecha: 'Hoy', nuevos: 2, tema: 'Rúbricas de evaluación', href: '#/asistentes/evaluacion',
+{ id: 'ar', correo: 'andres.rodriguez@uao.edu.co', dependencia: 'Centro de Excelencia en Docencia (CEEDi)', ext: '11458', comunes: 'Diseño Web', nombre: 'Andrés Rodríguez', rol: 'Colaborador CEEDi', tipo: 'ceedi', hora: '9:15 a. m.', grupo: 'Hoy', fecha: 'Hoy', nuevos: 2, tema: 'Rúbricas de evaluación', href: '#/asistentes/evaluacion',
 mensajes: [
 { yo: false, hora: '9:12 a. m.', texto: 'Revisé las rúbricas de la unidad 2. Hay dos criterios que conviene precisar.' },
 { yo: false, hora: '9:15 a. m.', texto: '¿Te parece si los ajustamos juntos esta semana?' }
 ] },
-{ id: 'ch', nombre: 'Carolina Herrera', rol: 'Docente UAO', tipo: 'prof', hora: '26/09', grupo: 'Anteriores', fecha: '26/09/2026', nuevos: 0, tema: 'Actividades de la unidad 3', href: '#/asistentes/disena',
+{ id: 'ch', correo: 'carolina.herrera@uao.edu.co', dependencia: 'Facultad de Ingeniería y Ciencias Básicas', ext: '13210', comunes: 'Taller de Creatividad', nombre: 'Carolina Herrera', rol: 'Docente UAO', tipo: 'prof', hora: '26/09', grupo: 'Anteriores', fecha: '26/09/2026', nuevos: 0, tema: 'Actividades de la unidad 3', href: '#/asistentes/disena',
 mensajes: [ { yo: false, hora: '3:20 p. m.', texto: 'Actualicé las actividades de la unidad 3 según lo que acordamos.' } ] },
-{ id: 'sm', nombre: 'Santiago Muñoz', rol: 'Colaborador CEEDi', tipo: 'ceedi', hora: '25/09', grupo: 'Anteriores', fecha: '25/09/2026', nuevos: 0, tema: 'Infografía del curso', href: '#/asistentes/aurea',
+{ id: 'sm', correo: 'santiago.munoz@uao.edu.co', dependencia: 'Centro de Excelencia en Docencia (CEEDi)', ext: '11461', comunes: 'Procesos Cognitivos', nombre: 'Santiago Muñoz', rol: 'Colaborador CEEDi', tipo: 'ceedi', hora: '25/09', grupo: 'Anteriores', fecha: '25/09/2026', nuevos: 0, tema: 'Infografía del curso', href: '#/asistentes/aurea',
 mensajes: [ { yo: false, hora: '11:05 a. m.', texto: '¿Puedes validar la infografía antes de publicarla?' } ] },
-{ id: 'mf', nombre: 'María Fernanda López', rol: 'Docente UAO', tipo: 'prof', hora: '24/09', grupo: 'Anteriores', fecha: '24/09/2026', nuevos: 0, tema: 'Formato del documento', href: '#/exportacion',
+{ id: 'mf', correo: 'mariaf.lopez@uao.edu.co', dependencia: 'Facultad de Comunicación y Ciencias Sociales', ext: '12305', comunes: 'Economía', nombre: 'María Fernanda López', rol: 'Docente UAO', tipo: 'prof', hora: '24/09', grupo: 'Anteriores', fecha: '24/09/2026', nuevos: 0, tema: 'Formato del documento', href: '#/exportacion',
 mensajes: [ { yo: false, hora: '4:45 p. m.', texto: 'Corregí el formato del documento final.' } ] }
 ];
 chats = chats.concat(this.state.nuevos.map(function (n) {
-return { id: n.id, nombre: n.nombre, rol: n.rol, tipo: n.tipo, hora: 'Ahora', grupo: 'Hoy', fecha: 'Hoy', nuevos: 0, tema: 'Conversación nueva', href: '#/mis-trayectorias', mensajes: [] };
+return { id: n.id, correo: n.correo, dependencia: n.tipo === 'ceedi' ? 'Centro de Excelencia en Docencia (CEEDi)' : 'Sin registrar', ext: 'Sin registrar', comunes: 'Ninguna por ahora', nombre: n.nombre, rol: n.rol, tipo: n.tipo, hora: 'Ahora', grupo: 'Hoy', fecha: 'Hoy', nuevos: 0, tema: 'Conversación nueva', href: '#/mis-trayectorias', mensajes: [] };
 }));
 var ini = function (n) { var p = n.split(' '); return (p[0].charAt(0) + p[p.length - 1].charAt(0)).toUpperCase(); };
 var av = function (tipo, size) { return 'flex: none; width: ' + size + 'px; height: ' + size + 'px; box-sizing: border-box; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; ' + estilos[tipo]; };
@@ -164,10 +164,15 @@ clasePaneles: 'paneles' + (this.state.plegado ? ' plegado' : ''),
 alternarContactos: function () { self.setState({ plegado: !self.state.plegado }); },
 crearDesdeRiel: function () { self.setState({ plegado: false, crear: true, errC: '' }); },
 contactos: todos.map(function (c) {
-var on = c.id === self.state.sel;
-return { nombre: c.nombre, rol: c.rol, ini: ini(c.nombre), avatar: av(c.tipo, 40),
-estilo: on ? 'background: #FBF5EC; border: 1.5px solid #FF051E' : 'background: #FFFFFF; border: 1.5px solid transparent',
-abrir: function () { var l = Object.assign({}, self.state.leidos); l[c.id] = true; self.setState({ sel: c.id, borrador: '', leidos: l }); } };
+var abierto = c.id === self.state.detalle;
+return { id: c.id, nombre: c.nombre, rol: c.rol, ini: ini(c.nombre), avatar: av(c.tipo, 40),
+correo: c.correo, mailto: 'mailto:' + c.correo, dependencia: c.dependencia, ext: c.ext, comunes: c.comunes,
+abierto: abierto, expandido: abierto ? 'true' : 'false', panelId: 'ct-' + c.id,
+estilo: abierto ? 'background: #FBF5EC; border: 1.5px solid #FF051E' : 'background: #FFFFFF; border: 1.5px solid transparent',
+flecha: 'flex: none; transition: transform .2s ease; transform: rotate(' + (abierto ? '180' : '0') + 'deg)',
+alternar: function () { self.setState({ detalle: self.state.detalle === c.id ? null : c.id }); },
+verDesdeRiel: function () { self.setState({ plegado: false, detalle: c.id }); },
+escribir: function () { var l = Object.assign({}, self.state.leidos); l[c.id] = true; var el = self.state.eliminadas.filter(function (x) { return x !== c.id; }); self.setState({ sel: c.id, borrador: '', leidos: l, eliminadas: el }); } };
 }),
 crearVisible: this.state.crear,
 crearAbierto: this.state.crear ? 'true' : 'false',
@@ -187,7 +192,7 @@ if (!/^[^@\s]+@uao\.edu\.co$/.test(cor)) { self.setState({ errC: 'Usa un correo 
 var rol = self.state.nRol;
 var tipo = rol.indexOf('CEEDi') >= 0 ? 'ceedi' : 'prof';
 var id = 'n' + (self.state.nuevos.length + 1);
-self.setState({ nuevos: self.state.nuevos.concat([{ id: id, nombre: nom, rol: rol, tipo: tipo }]), crear: false, nNombre: '', nCorreo: '', errC: '', sel: id });
+self.setState({ nuevos: self.state.nuevos.concat([{ id: id, nombre: nom, correo: cor, rol: rol, tipo: tipo }]), crear: false, nNombre: '', nCorreo: '', errC: '', detalle: id });
 },
 estadoNombre: e[0], estadoTexto: e[1],
 estadoCaja: 'display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 14px; box-sizing: border-box; ' + e[2],
@@ -554,7 +559,7 @@ export default function Chat(props) {
                   {(v.contactos || []).map((p, p_i) => (
                     <Fragment key={p_i}>
                       {" "}
-                      <button type="button" className="riel-av" onClick={p?.abrir} aria-label={`Escribir a ${p?.nombre ?? ''}, ${p?.rol ?? ''}`} title={p?.nombre}>
+                      <button type="button" className="riel-av" onClick={p?.verDesdeRiel} aria-label={`Ver detalles de ${p?.nombre ?? ''}, ${p?.rol ?? ''}`} title={p?.nombre}>
                         <span aria-hidden="true" style={sx(p?.avatar)}>
                           {p?.ini}
                         </span>
@@ -672,7 +677,8 @@ export default function Chat(props) {
                       <Fragment key={p_i}>
                         {" "}
                         <li>
-                          <button type="button" onClick={p?.abrir} aria-label={`Escribir a ${p?.nombre ?? ''}, ${p?.rol ?? ''}`} style={sx(p?.estilo)} className="contacto">
+                          {" "}
+                          <button type="button" onClick={p?.alternar} aria-expanded={p?.expandido} aria-controls={p?.panelId} aria-label={`Ver detalles de ${p?.nombre ?? ''}, ${p?.rol ?? ''}`} title="Ver detalles del contacto" style={sx(p?.estilo)} className="contacto">
                             {" "}
                             <span aria-hidden="true" style={sx(p?.avatar)}>
                               {p?.ini}
@@ -687,7 +693,81 @@ export default function Chat(props) {
                               </span>
                             </span>
                             {" "}
+                            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={sx(p?.flecha)}>
+                              <path d="M6 9l6 6 6-6"></path>
+                            </svg>
+                            {" "}
                           </button>
+                          {" "}
+                          {p?.abierto ? (
+                            <>
+                              {" "}
+                              <div id={p?.panelId} className="ct-detalle">
+                                {" "}
+                                <dl className="ct-datos">
+                                  {" "}
+                                  <div>
+                                    <dt>
+                                      Correo institucional
+                                    </dt>
+                                    <dd>
+                                      {p?.correo}
+                                    </dd>
+                                  </div>
+                                  {" "}
+                                  <div>
+                                    <dt>
+                                      Dependencia
+                                    </dt>
+                                    <dd>
+                                      {p?.dependencia}
+                                    </dd>
+                                  </div>
+                                  {" "}
+                                  <div>
+                                    <dt>
+                                      Extensión
+                                    </dt>
+                                    <dd>
+                                      {p?.ext}
+                                    </dd>
+                                  </div>
+                                  {" "}
+                                  <div>
+                                    <dt>
+                                      Trayectorias en común
+                                    </dt>
+                                    <dd>
+                                      {p?.comunes}
+                                    </dd>
+                                  </div>
+                                  {" "}
+                                </dl>
+                                {" "}
+                                <div className="ct-acciones">
+                                  {" "}
+                                  <button type="button" className="btn-pri" onClick={p?.escribir}>
+                                    <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                      <path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"></path>
+                                    </svg>
+                                    Escribir
+                                  </button>
+                                  {" "}
+                                  <a className="btn-sec" href={p?.mailto}>
+                                    <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                      <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+                                      <path d="M3 7l9 6 9-6"></path>
+                                    </svg>
+                                    Enviar correo
+                                  </a>
+                                  {" "}
+                                </div>
+                                {" "}
+                              </div>
+                              {" "}
+                            </>
+                          ) : null}
+                          {" "}
                         </li>
                         {" "}
                       </Fragment>

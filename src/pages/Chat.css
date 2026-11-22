@@ -52,6 +52,13 @@
 .pg-chat .persona{display:flex;align-items:center;gap:12px}
 .pg-chat .contacto{display:flex;align-items:center;gap:12px;width:100%;padding:10px;border-radius:12px;font-family:inherit;text-align:left;color:#8A1428;cursor:pointer}
 .pg-chat .contacto:hover{background:#FBF5EC}
+.pg-chat .ct-detalle{margin:6px 0 8px;padding:14px;border-radius:12px;background:#FBF5EC;border:1px solid #F1E4D3;display:flex;flex-direction:column;gap:14px}
+.pg-chat .ct-datos{margin:0;display:flex;flex-direction:column;gap:10px}
+.pg-chat .ct-datos div{display:flex;flex-direction:column;gap:2px}
+.pg-chat .ct-datos dt{font-size:12px;font-weight:700;color:#A1434F}
+.pg-chat .ct-datos dd{margin:0;font-size:14px;font-weight:600;color:#8A1428;overflow-wrap:anywhere}
+.pg-chat .ct-acciones{display:flex;flex-wrap:wrap;gap:8px}
+.pg-chat .ct-acciones .btn-pri,.pg-chat .ct-acciones .btn-sec{flex:1 1 auto;justify-content:center;gap:6px;min-height:44px;padding:0 12px;font-size:14px;text-decoration:none}
 .pg-chat .formc{display:flex;flex-direction:column;gap:12px;padding:16px;border-radius:14px;background:#FBF5EC;border:1px solid #F1E4D3}
 .pg-chat .formc label{display:flex;flex-direction:column;gap:4px;font-size:14px;font-weight:700}
 .pg-chat .formc input,.pg-chat .formc select{box-sizing:border-box;width:100%;min-height:44px;padding:0 12px;border-radius:10px;border:1.5px solid #E3CFC2;background:#FFFFFF;color:#8A1428;font-family:inherit;font-size:15px}
