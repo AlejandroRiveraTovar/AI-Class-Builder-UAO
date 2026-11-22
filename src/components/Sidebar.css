@@ -1,0 +1,67 @@
+/* Menú principal (barra lateral vino) */
+.menu-principal {
+  flex: 1 1 248px;
+  max-width: 100%;
+  box-sizing: border-box;
+  background: #8A1428;
+  color: #FBF5EC;
+  padding: 28px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+aside.menu-principal .menu-marca { display: flex; align-items: center; gap: 12px; text-decoration: none; padding: 0 8px; color: #FBF5EC; }
+aside.menu-principal .menu-marca-uao { font-size: 36px; font-weight: 800; letter-spacing: -1.5px; line-height: 1; color: #FBF5EC; }
+aside.menu-principal .menu-marca-linea { width: 1.5px; height: 30px; background: #FBF5EC; }
+aside.menu-principal .menu-marca-nombre { font-size: 14px; font-weight: 600; line-height: 1.15; color: #FBF5EC; }
+aside.menu-principal .menu-nav { display: flex; flex-direction: column; gap: 4px; flex-grow: 1; }
+aside.menu-principal .menu-enlace { display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 14px; border-radius: 12px; color: #FBF5EC; font-size: 15px; font-weight: 500; text-decoration: none; }
+aside.menu-principal .menu-enlace:hover { color: #FBF5EC; background: rgba(251, 245, 236, 0.12); }
+aside.menu-principal .menu-enlace.activo { background: #FBF5EC; color: #8A1428; font-weight: 700; }
+aside.menu-principal .menu-enlace:focus-visible, aside.menu-principal .menu-cuenta:focus-visible, aside.menu-principal .menu-marca:focus-visible { outline: 2px solid #FBF5EC; outline-offset: 2px; }
+aside.menu-principal .menu-cuenta { display: flex; align-items: center; gap: 12px; width: 100%; box-sizing: border-box; min-height: 60px; padding: 10px 12px; border-radius: 14px; border: 1px solid rgba(251, 245, 236, 0.3); color: #FBF5EC; text-decoration: none; }
+aside.menu-principal .menu-cuenta:hover { color: #FBF5EC; background: rgba(251, 245, 236, 0.08); }
+aside.menu-principal .menu-cuenta.activo, aside.menu-principal .menu-cuenta.activo:hover { background: #FBF5EC; color: #8A1428; border-color: #FBF5EC; }
+aside.menu-principal .menu-avatar { flex: none; width: 40px; height: 40px; border-radius: 50%; background: #FF836C; color: #8A1428; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; }
+aside.menu-principal .menu-cuenta-texto { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
+aside.menu-principal .menu-cuenta-nombre { font-size: 15px; font-weight: 700; }
+aside.menu-principal .menu-cuenta-rol { font-size: 13px; }
+
+/* Menú plegable */
+.nav-pleg { position: absolute; width: 1px; height: 1px; margin: 0; overflow: hidden; clip: rect(0 0 0 0); opacity: 0; }
+aside.menu-principal .nav-pleg-btn { display: none; }
+
+@media (min-width: 900px) {
+  aside.menu-principal .nav-pleg-btn { display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 14px; border-radius: 12px; color: #FBF5EC; font-size: 14px; font-weight: 600; cursor: pointer; user-select: none; }
+  aside.menu-principal .nav-pleg-btn:hover { background: rgba(251, 245, 236, 0.12); }
+  aside.menu-principal .nav-pleg-btn svg { flex: none; transition: transform 0.25s ease; }
+  .nav-pleg:focus-visible ~ .menu-principal .nav-pleg-btn { outline: 2px solid #FBF5EC; outline-offset: 2px; }
+
+  /* Fijo a la altura de la pantalla: el contenido de la derecha es el que se desplaza. */
+  .menu-principal {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    align-self: flex-start;
+    overflow-y: auto;
+    overflow-x: hidden;
+    transition: flex-basis 0.25s ease, max-width 0.25s ease;
+  }
+
+  .nav-pleg:checked ~ .menu-principal { flex: 0 0 84px; max-width: 84px; padding-left: 12px; padding-right: 12px; align-items: center; }
+  .nav-pleg:checked ~ aside.menu-principal .menu-marca { padding: 0; justify-content: center; }
+  .nav-pleg:checked ~ aside.menu-principal .menu-marca-linea,
+  .nav-pleg:checked ~ aside.menu-principal .menu-marca-nombre { display: none; }
+  .nav-pleg:checked ~ aside.menu-principal .menu-marca-uao { font-size: 28px; }
+  .nav-pleg:checked ~ aside.menu-principal .menu-nav { align-self: stretch; }
+  .nav-pleg:checked ~ aside.menu-principal .menu-enlace { font-size: 0; gap: 0; justify-content: center; padding: 0; }
+  .nav-pleg:checked ~ .menu-principal .nav-pleg-btn { width: 44px; padding: 0; justify-content: center; font-size: 0; gap: 0; }
+  .nav-pleg:checked ~ .menu-principal .nav-pleg-btn svg { transform: rotate(180deg); }
+  .nav-pleg:checked ~ aside.menu-principal .menu-cuenta { width: auto; min-height: 0; padding: 0; border: 0; justify-content: center; }
+  .nav-pleg:checked ~ aside.menu-principal .menu-cuenta-texto,
+  .nav-pleg:checked ~ aside.menu-principal .menu-cuenta > svg { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-principal, aside.menu-principal .nav-pleg-btn svg { transition: none; }
+}

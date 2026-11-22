@@ -1,0 +1,14 @@
+.pg-asistente-microcurricular{margin:0;background:#FBF5EC;font-family:'DM Sans',sans-serif;color:#8A1428}
+.pg-asistente-microcurricular a{color:#FF051E}
+.pg-asistente-microcurricular a:hover{color:#AC0B32}
+.pg-asistente-microcurricular input::placeholder{color:#A1434F}
+.pg-asistente-microcurricular .btn-sec{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:10px;border:1.5px solid #8A1428;background:#FFFFFF;color:#8A1428;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer}
+.pg-asistente-microcurricular .btn-pri{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 18px;border-radius:10px;border:0;background:#FF051E;color:#FFFFFF;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer}
+.pg-asistente-microcurricular .btn-baja{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:10px;border:1.5px solid #F1E4D3;background:#FFFFFF;color:#AC0B32;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer}
+.pg-asistente-microcurricular .nav-a{display:flex;align-items:center;gap:12px;min-height:46px;padding:0 14px;border-radius:12px;color:#FBF5EC;font-size:15px;font-weight:500;text-decoration:none}
+.pg-asistente-microcurricular .nav-a:hover{color:#FBF5EC;background:rgba(251,245,236,0.12)}
+.pg-asistente-microcurricular .td{padding:12px 16px;line-height:1.5;vertical-align:top}
+.pg-asistente-microcurricular .th{padding:12px 16px;font-size:14px;font-weight:700;text-align:left}
+@media (min-width: 900px){.pg-asistente-microcurricular .progreso{position:sticky;top:0;height:100vh;align-self:flex-start;overflow:hidden}
+.pg-asistente-microcurricular .progreso-lista{flex:1 1 auto;min-height:0;overflow-y:auto}
+}

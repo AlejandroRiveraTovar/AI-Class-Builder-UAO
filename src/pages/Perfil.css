@@ -1,0 +1,15 @@
+.pg-perfil{margin:0;background:#FBF5EC;font-family:'DM Sans',sans-serif;color:#8A1428}
+.pg-perfil a{color:#FF051E}
+.pg-perfil a:hover{color:#AC0B32}
+.pg-perfil input::placeholder,.pg-perfil textarea::placeholder{color:#A1434F}
+.pg-perfil .nav-a{display:flex;align-items:center;gap:12px;min-height:46px;padding:0 14px;border-radius:12px;color:#FBF5EC;font-size:15px;font-weight:500;text-decoration:none}
+.pg-perfil .nav-a:hover{color:#FBF5EC;background:rgba(251,245,236,0.12)}
+.pg-perfil .campo{display:flex;flex-direction:column;gap:8px;min-width:0}
+.pg-perfil .etq{display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:700;color:#8A1428}
+.pg-perfil .ctrl{box-sizing:border-box;width:100%;min-height:48px;padding:0 14px;border-radius:12px;border:1.5px solid #E3CFC2;background:#FFFFFF;color:#8A1428;font-family:inherit;font-size:15px}
+.pg-perfil .ctrl:focus{outline:2px solid #FF051E;outline-offset:1px}
+.pg-perfil textarea.ctrl{padding:12px 14px;line-height:1.55;resize:vertical}
+.pg-perfil .ayuda{font-size:13px;color:#A1434F}
+.pg-perfil .dato{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:15px}
+@media (min-width: 900px){.pg-perfil .lateral-fija{position:sticky;top:0;height:100vh;align-self:flex-start;overflow-y:auto}
+}

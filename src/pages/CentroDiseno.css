@@ -1,0 +1,8 @@
+.pg-centro-diseno{margin:0;background:#FBF5EC;font-family:'DM Sans',sans-serif;color:#8A1428}
+.pg-centro-diseno a{color:#FF051E}
+.pg-centro-diseno a:hover{color:#AC0B32}
+.pg-centro-diseno .rejilla{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+@media (max-width: 1300px){.pg-centro-diseno .rejilla{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width: 760px){.pg-centro-diseno .rejilla{grid-template-columns:1fr}
+}

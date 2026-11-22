@@ -1,0 +1,27 @@
+.pg-recursos{margin:0;background:#FBF5EC;font-family:'DM Sans',sans-serif;color:#8A1428}
+.pg-recursos a{color:#FF051E}
+.pg-recursos a:hover{color:#AC0B32}
+.pg-recursos input::placeholder{color:#A1434F}
+.pg-recursos .nav-a{display:flex;align-items:center;gap:12px;min-height:46px;padding:0 14px;border-radius:12px;color:#FBF5EC;font-size:15px;font-weight:500;text-decoration:none}
+.pg-recursos .nav-a:hover{color:#FBF5EC;background:rgba(251,245,236,0.12)}
+.pg-recursos .tarjeta{display:flex;flex-direction:column;gap:10px;padding:20px;border-radius:16px;background:#FFFFFF;border:1.5px solid #F1E4D3;text-decoration:none;color:#8A1428}
+.pg-recursos .tarjeta:hover{border-color:#FF051E;color:#8A1428}
+.pg-recursos .bloque{display:flex;flex-direction:column;gap:16px;padding:22px 24px;border-radius:20px;background:#FFFFFF}
+.pg-recursos .bloque-cab{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.pg-recursos .rejilla4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+@media (max-width: 1300px){.pg-recursos .rejilla4{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width: 700px){.pg-recursos .rejilla4{grid-template-columns:1fr}
+}
+.pg-recursos .servicio{display:flex;flex-direction:column;border-radius:16px;background:#FFFFFF;border:1.5px solid #F1E4D3;overflow:hidden;text-decoration:none;color:#8A1428}
+.pg-recursos .servicio:hover{border-color:#FF051E;color:#8A1428}
+.pg-recursos .servicio:hover .serv-nom svg{transform:translateX(3px)}
+.pg-recursos .serv-vis{position:relative;overflow:hidden;height:92px;background:#FBF5EC;display:flex;align-items:center;padding:0 22px;color:#FF051E}
+.pg-recursos .serv-vis::after{content:"";position:absolute;right:-50px;bottom:-70px;width:190px;height:130px;border-radius:50%;background:#F1E4D3}
+.pg-recursos .serv-vis svg{position:relative;z-index:1}
+.pg-recursos .serv-txt{display:flex;flex-direction:column;gap:4px;padding:14px 18px 16px}
+.pg-recursos .serv-nom{display:flex;align-items:center;gap:8px;margin:0;font-size:18px;font-weight:800;line-height:1.25}
+.pg-recursos .serv-nom svg{flex:none;color:#FF051E;transition:transform .15s}
+.pg-recursos .serv-txt p{margin:0;font-size:14px;line-height:1.45}
+@media (min-width: 900px){.pg-recursos .lateral-fija{position:sticky;top:0;height:100vh;align-self:flex-start;overflow-y:auto}
+}

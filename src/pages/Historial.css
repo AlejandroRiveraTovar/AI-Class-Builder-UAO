@@ -1,0 +1,10 @@
+.pg-historial{margin:0;background:#FBF5EC;font-family:'DM Sans',sans-serif;color:#8A1428}
+.pg-historial a{color:#FF051E}
+.pg-historial a:hover{color:#AC0B32}
+.pg-historial input::placeholder{color:#A1434F}
+.pg-historial .como{display:grid;grid-template-columns:minmax(220px,1fr) 3fr;gap:24px 40px;align-items:center}
+.pg-historial .como-pasos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 28px}
+@media (max-width: 1200px){.pg-historial .como{grid-template-columns:1fr}
+}
+@media (max-width: 800px){.pg-historial .como-pasos{grid-template-columns:1fr}
+}

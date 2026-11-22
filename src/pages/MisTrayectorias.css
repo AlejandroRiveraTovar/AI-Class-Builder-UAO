@@ -1,0 +1,22 @@
+.pg-mis-trayectorias{margin:0;background:#FBF5EC;font-family:'DM Sans',sans-serif;color:#8A1428}
+.pg-mis-trayectorias a{color:#FF051E}
+.pg-mis-trayectorias a:hover{color:#AC0B32}
+.pg-mis-trayectorias input::placeholder{color:#A1434F}
+.pg-mis-trayectorias .nt{position:relative;display:inline-flex}
+.pg-mis-trayectorias .nt-btn{display:inline-flex;align-items:center;gap:10px;min-height:50px;padding:0 24px;border-radius:12px;border:0;background:#FF051E;color:#FFFFFF;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer}
+.pg-mis-trayectorias .nt-btn:focus-visible{outline:2px solid #8A1428;outline-offset:3px}
+.pg-mis-trayectorias .nt-menu{position:absolute;right:0;bottom:100%;z-index:10;width:max(100%,300px);padding-bottom:10px;box-sizing:border-box;opacity:0;visibility:hidden;transform:translateY(6px);transition:opacity .18s ease,transform .18s ease,visibility 0s linear .18s}
+.pg-mis-trayectorias .nt:hover .nt-menu,.pg-mis-trayectorias .nt:focus-within .nt-menu{opacity:1;visibility:visible;transform:none;transition:opacity .18s ease,transform .18s ease}
+.pg-mis-trayectorias .nt-pill{display:flex;gap:6px;padding:6px;border-radius:999px;background:#FFFFFF;box-shadow:0 10px 26px rgba(138,20,40,0.16)}
+.pg-mis-trayectorias .nt-op{flex:1 1 52px;min-width:52px;min-height:46px;box-sizing:border-box;padding:0 14px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;gap:8px;overflow:hidden;white-space:nowrap;font-size:15px;font-weight:700;text-decoration:none;transition:flex-grow .25s ease}
+.pg-mis-trayectorias .nt-op svg{flex:none}
+.pg-mis-trayectorias .nt-lbl{max-width:0;opacity:0;overflow:hidden;transition:max-width .25s ease,opacity .2s ease}
+.pg-mis-trayectorias .nt-op:hover,.pg-mis-trayectorias .nt-op:focus-visible{flex-grow:12}
+.pg-mis-trayectorias .nt-op:hover .nt-lbl,.pg-mis-trayectorias .nt-op:focus-visible .nt-lbl{max-width:200px;opacity:1}
+.pg-mis-trayectorias .nt-op:focus-visible{outline:2px solid #8A1428;outline-offset:2px}
+.pg-mis-trayectorias .nt-crear{background:#FF051E;color:#FFFFFF}
+.pg-mis-trayectorias .nt-crear:hover{color:#FFFFFF}
+.pg-mis-trayectorias .nt-ctx{background:#8A1428;color:#FBF5EC}
+.pg-mis-trayectorias .nt-ctx:hover{color:#FBF5EC}
+@media (prefers-reduced-motion: reduce){.pg-mis-trayectorias .nt-menu,.pg-mis-trayectorias .nt-op,.pg-mis-trayectorias .nt-lbl{transition:none}
+}

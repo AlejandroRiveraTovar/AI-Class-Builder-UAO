@@ -1,0 +1,6 @@
+.pg-inicio{margin:0;background:#FBF5EC;font-family:'DM Sans',sans-serif;color:#8A1428}
+.pg-inicio a{color:#FF051E}
+.pg-inicio a:hover{color:#AC0B32}
+.pg-inicio summary{list-style:none;cursor:pointer}
+.pg-inicio summary::-webkit-details-marker{display:none}
+.pg-inicio details[open] .faq-plus{transform:rotate(45deg)}

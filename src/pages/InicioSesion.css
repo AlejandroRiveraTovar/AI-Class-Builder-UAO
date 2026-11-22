@@ -1,0 +1,39 @@
+.pg-inicio-sesion{margin:0;background:#FBF5EC;font-family:'DM Sans',sans-serif;color:#8A1428}
+.pg-inicio-sesion a{color:#FF051E}
+.pg-inicio-sesion a:hover{color:#AC0B32}
+.pg-inicio-sesion .lienzo{min-height:100vh;display:flex;flex-wrap:wrap;background:#FBF5EC;color:#8A1428;font-family:'DM Sans',sans-serif}
+.pg-inicio-sesion .foto{position:relative;flex:1 1 560px;min-height:420px;overflow:hidden;background:#8A1428 url('../assets/inicio-sesion.jpg') center/cover no-repeat}
+.pg-inicio-sesion .foto-arco{position:absolute;left:-12%;right:-12%;bottom:-300px;height:520px;border-radius:50%;background:#FF051E}
+.pg-inicio-sesion .foto-txt{position:absolute;left:0;right:0;bottom:44px;padding:0 56px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;color:#FFFFFF}
+.pg-inicio-sesion .foto-txt strong{font-size:30px;line-height:1.15;font-weight:800;letter-spacing:-0.5px;max-width:560px}
+.pg-inicio-sesion .foto-txt span{font-size:16px;line-height:1.5;max-width:520px}
+.pg-inicio-sesion .panel{flex:1 1 560px;min-width:0;box-sizing:border-box;display:flex;align-items:center;justify-content:center;padding:48px clamp(16px,5vw,72px)}
+.pg-inicio-sesion .caja{width:100%;max-width:480px;display:flex;flex-direction:column;gap:28px}
+.pg-inicio-sesion .marca{display:flex;align-items:center;gap:16px;text-decoration:none;color:#FF051E}
+.pg-inicio-sesion .marca b{font-size:72px;line-height:0.9;font-weight:800;letter-spacing:-3px}
+.pg-inicio-sesion .marca i{width:2px;height:64px;background:#FF051E}
+.pg-inicio-sesion .marca span{font-size:18px;line-height:1.15;font-weight:500}
+.pg-inicio-sesion .campo{display:flex;flex-direction:column;gap:6px}
+.pg-inicio-sesion .campo label,.pg-inicio-sesion .etq{font-size:15px;font-weight:700}
+.pg-inicio-sesion .ctrl{display:flex;align-items:center;gap:10px;min-height:52px;padding:0 6px 0 14px;box-sizing:border-box;border-radius:12px;border:1.5px solid #E3CFC2;background:#FFFFFF;color:#AC0B32}
+.pg-inicio-sesion .ctrl:focus-within{border-color:#FF051E;box-shadow:0 0 0 3px rgba(255,5,30,0.15)}
+.pg-inicio-sesion .ctrl.error{border-color:#AC0B32}
+.pg-inicio-sesion .ctrl input{flex:1 1 auto;min-width:0;min-height:48px;border:0;outline:none;background:transparent;color:#8A1428;font-family:inherit;font-size:16px}
+.pg-inicio-sesion .ctrl input::placeholder{color:#A1434F}
+.pg-inicio-sesion .ojo{flex:none;width:44px;height:44px;border:0;border-radius:10px;background:transparent;color:#8A1428;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.pg-inicio-sesion .ojo:hover{background:#FBF5EC}
+.pg-inicio-sesion .ojo:focus-visible,.pg-inicio-sesion .btn:focus-visible,.pg-inicio-sesion .enlace:focus-visible{outline:2px solid #FF051E;outline-offset:2px}
+.pg-inicio-sesion .msj{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:#AC0B32}
+.pg-inicio-sesion .fila{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px}
+.pg-inicio-sesion .recordar{display:inline-flex;align-items:center;gap:10px;min-height:44px;font-size:15px;cursor:pointer}
+.pg-inicio-sesion .recordar input{accent-color:#FF051E;width:20px;height:20px;margin:0}
+.pg-inicio-sesion .enlace{display:inline-flex;align-items:center;min-height:44px;font-size:15px;font-weight:700;text-underline-offset:3px}
+.pg-inicio-sesion .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:52px;padding:0 24px;box-sizing:border-box;border-radius:12px;font-family:inherit;font-size:17px;font-weight:700;cursor:pointer;text-decoration:none}
+.pg-inicio-sesion .btn-pri{border:0;background:#FF051E;color:#FFFFFF}
+.pg-inicio-sesion .btn-pri:hover{background:#AC0B32;color:#FFFFFF}
+.pg-inicio-sesion .btn-sec{border:1.5px solid #8A1428;background:#FFFFFF;color:#8A1428}
+.pg-inicio-sesion .btn-sec:hover{background:#FBF5EC;color:#8A1428}
+.pg-inicio-sesion .sep{display:flex;align-items:center;gap:14px;font-size:14px;font-weight:600;color:#A1434F}
+.pg-inicio-sesion .sep::before,.pg-inicio-sesion .sep::after{content:"";flex:1 1 auto;height:1px;background:#E3CFC2}
+.pg-inicio-sesion .pie{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 18px;font-size:14px;color:#A1434F;text-align:center}
+.pg-inicio-sesion .pie a{font-weight:600}

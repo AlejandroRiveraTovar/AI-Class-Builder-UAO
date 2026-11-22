@@ -1,0 +1,7 @@
+.pg-asistente-diseno-curricular{margin:0;background:#FBF5EC;font-family:'DM Sans',sans-serif;color:#8A1428}
+.pg-asistente-diseno-curricular a{color:#FF051E}
+.pg-asistente-diseno-curricular a:hover{color:#AC0B32}
+.pg-asistente-diseno-curricular input::placeholder{color:#A1434F}
+@media (min-width: 900px){.pg-asistente-diseno-curricular .progreso{position:sticky;top:0;height:100vh;align-self:flex-start;overflow:hidden}
+.pg-asistente-diseno-curricular .progreso-lista{flex:1 1 auto;min-height:0;overflow-y:auto}
+}
