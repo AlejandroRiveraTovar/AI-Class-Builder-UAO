@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useRoute } from './lib/router.js';
+import { useRoute, navigate } from './lib/router.js';
+import { AuthProvider, useAuth } from './lib/auth.jsx';
 import { NavContext } from './components/NavContext.js';
 import Inicio from './pages/Inicio.jsx';
 import InicioSesion from './pages/InicioSesion.jsx';
@@ -47,6 +48,9 @@ const RUTAS = {
   '/politica-privacidad': Politica,
 };
 
+// Rutas que se pueden ver sin iniciar sesión.
+const RUTAS_PUBLICAS = ['/', '/iniciar-sesion', '/politica-privacidad'];
+
 function leerPlegado() {
   try {
     return window.localStorage.getItem('menuPlegado') === '1';
@@ -55,8 +59,10 @@ function leerPlegado() {
   }
 }
 
-export default function App() {
+function AppInterna() {
   const path = useRoute();
+  const { loading, session } = useAuth();
+  const requiereSesion = !RUTAS_PUBLICAS.includes(path);
   const [plegado, setPlegadoState] = useState(leerPlegado);
 
   const nav = useMemo(
@@ -73,6 +79,11 @@ export default function App() {
     }),
     [plegado]
   );
+
+  // Sin sesión, las rutas privadas llevan al inicio de sesión.
+  useEffect(() => {
+    if (!loading && !session && requiereSesion) navigate('/iniciar-sesion');
+  }, [loading, session, requiereSesion]);
 
   // Enlaces internos de la página (#arriba) y enlaces vacíos (#).
   useEffect(() => {
@@ -96,6 +107,9 @@ export default function App() {
     return () => document.removeEventListener('click', onClick);
   }, []);
 
+  // Mientras se comprueba la sesión (o se redirige) no se pinta contenido privado.
+  if (loading || (!session && requiereSesion)) return null;
+
   let pagina;
   const contexto = path.match(/^\/contextualizacion(?:\/([1-5]))?$/);
   if (contexto) {
@@ -107,4 +121,12 @@ export default function App() {
   }
 
   return <NavContext.Provider value={nav}>{pagina}</NavContext.Provider>;
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppInterna />
+    </AuthProvider>
+  );
 }

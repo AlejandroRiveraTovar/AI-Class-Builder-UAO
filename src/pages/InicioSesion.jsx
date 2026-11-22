@@ -1,13 +1,15 @@
 import { useEffect } from 'react';
 import { PageLogic, usePageLogic } from '../lib/pageLogic.js';
 import { sx } from '../lib/sx.js';
+import { iniciarSesion, mensajeDeLogin } from '../lib/auth.jsx';
+import { navigate } from '../lib/router.js';
 import './InicioSesion.css';
 
 // Lógica y datos de la página (estado local, sin servidor).
 class Logic extends PageLogic {
 constructor(props) {
 super(props);
-this.state = { correo: '', clave: '', ver: false, intento: false };
+this.state = { correo: '', clave: '', ver: false, intento: false, cargando: false, errorGeneral: '' };
 }
 renderVals() {
 var self = this;
@@ -19,6 +21,16 @@ else if (!/^[^@\s]+@uao\.edu\.co$/.test(c)) errC = 'Usa tu correo institucional,
 }
 var errK = this.state.intento && !this.state.clave;
 var ver = this.state.ver;
+var ingresar = function () {
+var cc = (self.state.correo || '').trim().toLowerCase();
+if (!(/^[^@\s]+@uao\.edu\.co$/.test(cc) && self.state.clave)) { self.setState({ intento: true }); return; }
+if (self.state.cargando) return;
+self.setState({ cargando: true, errorGeneral: '' });
+iniciarSesion(cc, self.state.clave)
+.then(function () { navigate('/mis-trayectorias'); })
+.catch(function (err) { self.setState({ errorGeneral: mensajeDeLogin(err) }); })
+.then(function () { self.setState({ cargando: false }); });
+};
 return {
 correo: this.state.correo,
 clave: this.state.clave,
@@ -37,11 +49,11 @@ claveVisible: ver,
 claveOculta: !ver,
 textoOjo: ver ? 'Ocultar contraseña' : 'Mostrar contraseña',
 alternarClave: function () { self.setState({ ver: !self.state.ver }); },
-ingresar: function () {
-var cc = (self.state.correo || '').trim().toLowerCase();
-if (/^[^@\s]+@uao\.edu\.co$/.test(cc) && self.state.clave) { window.location.href = '#/mis-trayectorias'; }
-else { self.setState({ intento: true }); }
-}
+ingresar: ingresar,
+teclaClave: function (e) { if (e.key === 'Enter') { e.preventDefault(); ingresar(); } },
+cargando: this.state.cargando,
+hayErrorGeneral: !!this.state.errorGeneral,
+errorGeneral: this.state.errorGeneral
 };
 }
 }
@@ -161,7 +173,7 @@ export default function InicioSesion(props) {
                     <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
                   </svg>
                   {" "}
-                  <input id="clave" type={v.tipoClave} autoComplete="current-password" placeholder="Escribe tu contraseña" value={v.clave ?? ''} onChange={v.cambiarClave} aria-invalid={v.claveInvalida} aria-describedby="error-clave" />
+                  <input id="clave" type={v.tipoClave} autoComplete="current-password" placeholder="Escribe tu contraseña" value={v.clave ?? ''} onChange={v.cambiarClave} onKeyDown={v.teclaClave} aria-invalid={v.claveInvalida} aria-describedby="error-clave" />
                   {" "}
                   <button type="button" className="ojo" onClick={v.alternarClave} aria-pressed={v.verClave} aria-label={v.textoOjo} title={v.textoOjo}>
                     {" "}
@@ -206,6 +218,12 @@ export default function InicioSesion(props) {
                 {" "}
               </div>
               {" "}
+              {v.hayErrorGeneral ? (
+                <span className="msj" role="alert">
+                  {v.errorGeneral}
+                </span>
+              ) : null}
+              {" "}
               <div className="fila">
                 {" "}
                 <label className="recordar">
@@ -219,22 +237,14 @@ export default function InicioSesion(props) {
                 {" "}
               </div>
               {" "}
-              <button type="button" className="btn btn-pri" onClick={v.ingresar}>
-                Iniciar sesión{" "}
+              <button type="button" className="btn btn-pri" onClick={v.ingresar} disabled={v.cargando}>
+                {v.cargando ? 'Ingresando…' : 'Iniciar sesión'}{" "}
                 <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12h14"></path>
                   <path d="M13 6l6 6-6 6"></path>
                 </svg>
               </button>
-              {" "}
-              <div className="sep">
-                o
-              </div>
-              {" "}
-              <a href="#/mis-trayectorias" className="btn btn-sec">
-                Continuar con Google
-              </a>
-              {" "}
+                            {" "}
             </div>
             {" "}
             <div className="pie">

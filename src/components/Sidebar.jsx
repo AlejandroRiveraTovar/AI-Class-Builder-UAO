@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNav } from './NavContext.js';
+import { useAuth } from '../lib/auth.jsx';
+import { navigate } from '../lib/router.js';
 import './Sidebar.css';
 
 const ENLACES = [
@@ -52,6 +54,10 @@ const ICONO_SALIR = ['M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4', 'M16 17l5-5-5-5'
 function MenuCuenta({ activo }) {
   const [abierto, setAbierto] = useState(false);
   const ref = useRef(null);
+  const { user, role, signOut } = useAuth();
+  const nombre = user?.user_metadata?.full_name ?? user?.email ?? 'Usuario';
+  const iniciales = nombre.split(/[\s@._-]+/).filter(Boolean).slice(0, 2).map((p) => p[0].toUpperCase()).join('');
+  const rolTexto = { docente: 'Docente UAO', ceedi: 'CEEDi', tecnico: 'Equipo técnico', custodio: 'Custodio UAO' }[role] ?? 'Docente UAO';
 
   useEffect(() => {
     if (!abierto) return undefined;
@@ -81,7 +87,16 @@ function MenuCuenta({ activo }) {
             Configuración
           </a>
           <hr />
-          <a href="#/" className="salir" onClick={() => setAbierto(false)}>
+          <a
+            href="#/"
+            className="salir"
+            onClick={async (e) => {
+              e.preventDefault();
+              setAbierto(false);
+              await signOut();
+              navigate('/');
+            }}
+          >
             <Icono paths={ICONO_SALIR} size={18} />
             Cerrar sesión
           </a>
@@ -90,16 +105,16 @@ function MenuCuenta({ activo }) {
       <button
         type="button"
         className={activo ? 'usuario-btn activo' : 'usuario-btn'}
-        aria-label="Menú de cuenta de Juan Martínez"
+        aria-label={`Menú de cuenta de ${nombre}`}
         aria-expanded={abierto}
         aria-controls="menu-cuenta"
         title="Opciones de la cuenta"
         onClick={() => setAbierto((v) => !v)}
       >
-        <span className="usuario-av" aria-hidden="true">JM</span>
+        <span className="usuario-av" aria-hidden="true">{iniciales}</span>
         <span className="usuario-txt">
-          <span className="usuario-nom">Juan Martínez</span>
-          <span className="usuario-rol">{activo ? 'Mi perfil' : 'Docente UAO'}</span>
+          <span className="usuario-nom">{nombre}</span>
+          <span className="usuario-rol">{activo ? 'Mi perfil' : rolTexto}</span>
         </span>
         <span className="usuario-flecha">
           <Icono paths={['M6 15l6-6 6 6']} size={18} />
