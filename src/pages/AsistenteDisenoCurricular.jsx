@@ -1,6 +1,7 @@
 import { Fragment, useEffect } from 'react';
 import { PageLogic, usePageLogic } from '../lib/pageLogic.js';
 import { sx } from '../lib/sx.js';
+import { enviarAlAgente, resolverSugerencia } from '../lib/agentChat.js';
 import Sidebar from '../components/Sidebar.jsx';
 import './AsistenteDisenoCurricular.css';
 
@@ -8,7 +9,7 @@ import './AsistenteDisenoCurricular.css';
 class Logic extends PageLogic {
 constructor(props) {
 super(props);
-this.state = { decision: null, borrador: '', extra: [] };
+this.state = { decision: null, borrador: '', extra: [], cargando: false, error: '', ultimaSugerencia: null };
 }
 renderVals() {
 var self = this;
@@ -59,18 +60,18 @@ decidida: !!d,
 decisionTexto: d === 'aceptada' ? 'Integraste estos niveles de desempeño a tu trayectoria.' : 'Rechazaste esta propuesta. Pídele al asistente una nueva versión.',
 marcaEstilo: marca + (d === 'aceptada' ? 'background: #8A1428; color: #FBF5EC' : 'background: #FFFFFF; color: #AC0B32; border: 1.5px solid #AC0B32'),
 marcaIcono: d === 'aceptada' ? 'M5 12l5 5 9-10' : 'M7 7l10 10M17 7L7 17',
-aceptar: function () { self.setState({ decision: 'aceptada' }); },
-rechazar: function () { self.setState({ decision: 'rechazada' }); },
+aceptar: function () { resolverSugerencia(self, 'accepted', 'diseno_curricular'); self.setState({ decision: 'aceptada' }); },
+rechazar: function () { resolverSugerencia(self, 'rejected', 'diseno_curricular'); self.setState({ decision: 'rechazada' }); },
 deshacer: function () { self.setState({ decision: null }); },
 borrador: this.state.borrador,
 escribir: function (e) { self.setState({ borrador: e.target.value }); },
 enviar: function (e) {
 e.preventDefault();
-var t = (self.state.borrador || '').trim();
-if (!t) return;
-self.setState({ extra: self.state.extra.concat([{ texto: t }]), borrador: '' });
+enviarAlAgente(self, 'diseno_curricular');
 },
-extra: this.state.extra
+extra: this.state.extra,
+cargando: this.state.cargando,
+error: this.state.error
 };
 }
 }
@@ -367,7 +368,17 @@ export default function AsistenteDisenoCurricular(props) {
               {" "}
             </div>
             {" "}
-            {(v.extra || []).map((m, m_i) => (
+            {(v.extra || []).map((m, m_i) => m?.rol === 'ia' ? (
+              <Fragment key={m_i}>
+                <div style={sx("display: flex; justify-content: flex-start; align-items: flex-start; gap: 12px")}>
+                  <div style={sx("max-width: 720px; background: #FFFFFF; color: #8A1428; border: 1px solid #F1E4D3; border-radius: 4px 18px 18px 18px; padding: 16px 20px")}>
+                    <p style={sx("margin: 0; font-size: 16px; line-height: 1.55; white-space: pre-wrap")}>
+                      {m?.texto}
+                    </p>
+                  </div>
+                </div>
+              </Fragment>
+            ) : (
               <Fragment key={m_i}>
                 {" "}
                 <div style={sx("display: flex; justify-content: flex-end; align-items: flex-start; gap: 12px")}>
@@ -388,6 +399,16 @@ export default function AsistenteDisenoCurricular(props) {
                 {" "}
               </Fragment>
             ))}
+            {v.cargando ? (
+              <p role="status" style={sx("margin: 0; font-size: 15px; color: #A1434F")}>
+                El asistente está respondiendo…
+              </p>
+            ) : null}
+            {v.error ? (
+              <p role="alert" style={sx("margin: 0; font-size: 15px; font-weight: 700; color: #AC0B32")}>
+                {v.error}
+              </p>
+            ) : null}
             {" "}
           </div>
           {" "}
