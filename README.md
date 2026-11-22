@@ -1,11 +1,15 @@
 # AI Class Builder UAO · Frontend en React
 
-Aplicación web (solo frontend) de AI Class Builder UAO, construida con **React 18 y JavaScript (JSX)**, sin librerías adicionales. Vite se usa únicamente como herramienta de desarrollo y compilación.
+Aplicación web (solo frontend) de AI Class Builder UAO, construida con **React 18 y JavaScript (JSX)**; la única librería adicional es `@supabase/supabase-js` (inicio de sesión). Vite se usa únicamente como herramienta de desarrollo y compilación.
 
 ## Requisitos
 
 - Node.js 18 o superior
 - npm 9 o superior
+
+## Configuración
+
+Copia `.env.example` a `.env` y completa `VITE_SUPABASE_URL` y `VITE_SUPABASE_PUBLISHABLE_KEY` (clave publicable, nunca la secreta).
 
 ## Cómo ejecutarla
 
@@ -66,11 +70,29 @@ Cada hoja de estilos de página lleva un prefijo propio (`.pg-nombre-de-pagina`)
 
 Una ruta desconocida lleva a la página de inicio.
 
+## Conexión con el backend (repositorio `aicb-api`)
+
+El backend es un repositorio aparte. El frontend solo necesita que esté accesible en `http://localhost:3001`.
+
+- **Desarrollo:** Vite reenvía `/api` al backend (`VITE_DEV_API_TARGET`), así que no hace falta configurar CORS.
+- **Producción:** si el backend está en otro dominio, define `VITE_API_URL` (y el backend debe incluir el dominio del frontend en su `ALLOWED_ORIGIN`). Si ambos se sirven bajo el mismo dominio, déjalo vacío.
+
+Capa de conexión (`src/lib`):
+
+| Archivo | Para qué sirve |
+|---|---|
+| `supabase.js` | Cliente de Supabase con clave publicable |
+| `auth.jsx` | `AuthProvider` y `useAuth()` (sesión, rol, `signIn`, `signOut`) |
+| `api.js` | Cliente REST con `Authorization: Bearer`; errores como `ApiError` |
+| `tracking.js` | `track()` envía los eventos del Tracking Plan en lotes |
+
+Las rutas privadas redirigen a `#/iniciar-sesion` si no hay sesión. Rutas públicas: `#/`, `#/iniciar-sesion`, `#/politica-privacidad`.
+
 ## Datos
 
 Los datos que se muestran (trayectorias, conversaciones, analítica, etc.) son de ejemplo y viven en la lógica de cada página (`class Logic` al inicio de cada archivo de `src/pages`). Para conectar el backend, reemplaza esos datos por llamadas a la API, por ejemplo con `fetch` dentro de un `useEffect`.
 
-Para el inicio de sesión de prueba, usa cualquier correo `@uao.edu.co` y cualquier contraseña.
+Para iniciar sesión se usa un usuario real de Supabase Auth (ya no sirve cualquier correo).
 
 ## Pantalla de referencia
 
