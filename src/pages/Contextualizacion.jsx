@@ -1,6 +1,7 @@
 import { Fragment, useEffect } from 'react';
 import { PageLogic, usePageLogic } from '../lib/pageLogic.js';
 import { sx } from '../lib/sx.js';
+import { guardarConsentimiento } from '../lib/consent.js';
 import Sidebar from '../components/Sidebar.jsx';
 import './Contextualizacion.css';
 
@@ -18,7 +19,8 @@ comp: [''], ra: [''], ce: [''],
 prop: [''], func: [''], axio: [''],
 presentacion: '',
 aporte: '',
-consiento: false, guardado: false
+consiento: false, guardado: false,
+guardando: false, errorConsent: ''
 };
 }
 renderVals() {
@@ -96,13 +98,15 @@ alternarConsentimiento: function () { self.setState({ consiento: !self.state.con
 consentCaja: 'display: flex; align-items: flex-start; gap: 14px; padding: 18px 20px; border-radius: 14px; cursor: pointer; ' + (s.consiento ? 'background: #FFFFFF; border: 2px solid #FF051E' : 'background: #FFFFFF; border: 2px solid #E3CFC2'),
 vinculados: vinculados,
 guardado: s.guardado,
+guardando: s.guardando,
+errorConsent: s.errorConsent,
 atras: function () { self.setState({ paso: Math.max(1, self.state.paso - 1) }); },
 puedeOmitir: s.paso >= 2 && s.paso <= 4,
 omitir: function () { self.setState({ paso: Math.min(5, self.state.paso + 1) }); },
 siguiente: function (e) {
 e.preventDefault();
 if (self.state.paso < 5) self.setState({ paso: self.state.paso + 1 });
-else if (self.state.consiento) { window.location.href = '#/centro-diseno'; }
+else if (self.state.consiento) { guardarConsentimiento(self, '/centro-diseno'); }
 },
 bloqueado: bloqueado,
 botonTexto: ultimo ? 'Guardar y continuar' : 'Continuar',
@@ -812,6 +816,11 @@ export default function Contextualizacion(props) {
                     {" "}
                   </div>
                   {" "}
+                  {v.errorConsent ? (
+                    <p role="alert" style={sx("margin: 0; font-size: 15px; font-weight: 700; color: #AC0B32")}>
+                      {v.errorConsent}
+                    </p>
+                  ) : null}
                   <label style={sx(v.consentCaja)}>
                     {" "}
                     <input type="checkbox" checked={!!v.consiento} onChange={v.alternarConsentimiento} style={sx("margin-top: 2px")} />
