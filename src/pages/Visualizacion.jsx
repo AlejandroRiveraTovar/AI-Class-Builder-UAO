@@ -6,7 +6,24 @@ import './Visualizacion.css';
 
 // Lógica y datos de la página (estado local, sin servidor).
 class Logic extends PageLogic {
-renderVals() { return {}; }
+renderValsPagina() { return {}; }
+
+renderVals() { return Object.assign({}, this.renderValsPagina(), this.usuarioVals()); }
+// rol:inicio
+usuarioVals() {
+var rol = 'docente';
+try { rol = window.localStorage.getItem('aicb-rol') === 'ceedi' ? 'ceedi' : 'docente'; } catch (e) { rol = 'docente'; }
+var ceedi = rol === 'ceedi';
+return {
+usrTrayHref: ceedi ? '#/ceedi/trayectorias' : '#/mis-trayectorias',
+usrTrayTexto: ceedi ? 'Trayectorias' : 'Mis trayectorias',
+usrPerfilHref: ceedi ? '#/ceedi/perfil' : '#/perfil',
+usrNombre: ceedi ? 'Laura Gómez' : 'Juan Martínez',
+usrRol: ceedi ? 'Colaboradora CEEDi' : 'Docente UAO',
+usrIni: ceedi ? 'LG' : 'JM'
+};
+}
+// rol:fin
 }
 
 export default function Visualizacion(props) {
@@ -30,8 +47,8 @@ export default function Visualizacion(props) {
             <ol style={sx("list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 2px 10px; font-size: 14px; color: #8A1428")}>
               {" "}
               <li>
-                <a href="#/mis-trayectorias" style={sx("display: inline-flex; align-items: center; min-height: 36px; font-weight: 600; color: #FF051E; text-underline-offset: 3px")}>
-                  Mis trayectorias
+                <a href={v.usrTrayHref} style={sx("display: inline-flex; align-items: center; min-height: 36px; font-weight: 600; color: #FF051E; text-underline-offset: 3px")}>
+                  {v.usrTrayTexto}
                 </a>
               </li>
               {" "}
@@ -62,7 +79,7 @@ export default function Visualizacion(props) {
             {" "}
           </div>
           {" "}
-          <section aria-label="Ficha de la trayectoria" style={sx("position: relative; overflow: hidden; border-radius: 20px; background: #FF051E; color: #FFFFFF; padding: 26px 30px; display: flex; flex-wrap: wrap; align-items: center; gap: 20px 36px")}>
+          <section data-guia="ficha" aria-label="Ficha de la trayectoria" style={sx("position: relative; overflow: hidden; border-radius: 20px; background: #FF051E; color: #FFFFFF; padding: 26px 30px; display: flex; flex-wrap: wrap; align-items: center; gap: 20px 36px")}>
             {" "}
             <div aria-hidden="true" style={sx("position: absolute; right: -60px; bottom: -230px; width: 380px; height: 320px; border-radius: 50%; background: #FBF5EC")}></div>
             {" "}
@@ -124,7 +141,7 @@ export default function Visualizacion(props) {
             {" "}
           </section>
           {" "}
-          <nav aria-label="Artefactos del diseño" className="indice" style={sx("display: flex; flex-direction: column; gap: 10px")}>
+          <nav data-guia="indice" aria-label="Artefactos del diseño" className="indice" style={sx("display: flex; flex-direction: column; gap: 10px")}>
             {" "}
             <div style={sx("display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px")}>
               {" "}
@@ -179,7 +196,7 @@ export default function Visualizacion(props) {
             {" "}
           </nav>
           {" "}
-          <section id="a1" className="art" aria-labelledby="t-a1">
+          <section data-guia="seccion" id="a1" className="art" aria-labelledby="t-a1">
             {" "}
             <div className="cab">
               {" "}

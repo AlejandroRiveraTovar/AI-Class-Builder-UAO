@@ -10,7 +10,7 @@ constructor(props) {
 super(props);
 this.state = { sel: 'lg', q: '', filtro: 'todas', borrador: '', estado: 'revision', extra: {}, leidos: {}, nuevos: [], crear: false, nNombre: '', nCorreo: '', nRol: 'Colaboradora CEEDi', errC: '', plegado: false, forzados: {}, eliminadas: [], eliminar: null, avisoConv: '', deshacerAccion: null, detalle: null };
 }
-renderVals() {
+renderValsPagina() {
 var self = this;
 var estilos = {
 ceedi: 'background: #FF051E; color: #FFFFFF',
@@ -202,6 +202,23 @@ cambios: function () { self.setState({ estado: 'cambios' }); },
 resolver: function () { self.setState({ estado: 'resuelta' }); }
 };
 }
+
+renderVals() { return Object.assign({}, this.renderValsPagina(), this.usuarioVals()); }
+// rol:inicio
+usuarioVals() {
+var rol = 'docente';
+try { rol = window.localStorage.getItem('aicb-rol') === 'ceedi' ? 'ceedi' : 'docente'; } catch (e) { rol = 'docente'; }
+var ceedi = rol === 'ceedi';
+return {
+usrTrayHref: ceedi ? '#/ceedi/trayectorias' : '#/mis-trayectorias',
+usrTrayTexto: ceedi ? 'Trayectorias' : 'Mis trayectorias',
+usrPerfilHref: ceedi ? '#/ceedi/perfil' : '#/perfil',
+usrNombre: ceedi ? 'Laura Gómez' : 'Juan Martínez',
+usrRol: ceedi ? 'Colaboradora CEEDi' : 'Docente UAO',
+usrIni: ceedi ? 'LG' : 'JM'
+};
+}
+// rol:fin
 }
 
 export default function Chat(props) {
@@ -247,7 +264,7 @@ export default function Chat(props) {
           {" "}
           <div className={v.clasePaneles}>
             {" "}
-            <section className="panel lista" aria-labelledby="t-conv">
+            <section data-guia="conversaciones" className="panel lista" aria-labelledby="t-conv">
               {" "}
               <div className="lista-cab">
                 {" "}
@@ -410,7 +427,7 @@ export default function Chat(props) {
               {" "}
             </section>
             {" "}
-            <section className="panel conv" aria-labelledby="t-tema">
+            <section data-guia="conversacion" className="panel conv" aria-labelledby="t-tema">
               {" "}
               <header className="conv-cab">
                 {" "}
@@ -512,12 +529,72 @@ export default function Chat(props) {
               {" "}
               <form onSubmit={v.enviar} className="redactar">
                 {" "}
-                <button type="button" className="icono" aria-label="Adjuntar archivo" title="Adjuntar archivo" style={sx("border: 0; background: transparent")}>
+                <details className="adjuntar">
                   {" "}
-                  <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20 11.5l-8 8a5 5 0 0 1-7-7l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7l-8.3 8.3a1.7 1.7 0 0 1-2.4-2.4l7.6-7.6"></path>
-                  </svg>
-                </button>
+                  <summary className="icono" aria-label="Adjuntar" title="Adjuntar" style={sx("border: 0; background: transparent")}>
+                    {" "}
+                    <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M20 11.5l-8 8a5 5 0 0 1-7-7l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7l-8.3 8.3a1.7 1.7 0 0 1-2.4-2.4l7.6-7.6"></path>
+                    </svg>
+                  </summary>
+                  {" "}
+                  <div className="adjuntar-menu" role="group" aria-label="Adjuntar">
+                    {" "}
+                    <span className="adjuntar-tit" aria-hidden="true">
+                      Adjuntar
+                    </span>
+                    {" "}
+                    <label className="adjuntar-op">
+                      <span className="adjuntar-ic" style={sx("background: #FF051E; color: #FFFFFF")}>
+                        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path>
+                          <path d="M14 3v5h5"></path>
+                          <path d="M9 13h6"></path>
+                          <path d="M9 17h4"></path>
+                        </svg>
+                      </span>
+                      Documento
+                      <input type="file" className="adjuntar-in" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv" aria-label="Adjuntar documento" />
+                    </label>
+                    {" "}
+                    <label className="adjuntar-op">
+                      <span className="adjuntar-ic" style={sx("background: #8A1428; color: #FBF5EC")}>
+                        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+                          <circle cx="9" cy="10" r="2"></circle>
+                          <path d="M21 16l-5-5-9 9"></path>
+                        </svg>
+                      </span>
+                      Fotos y videos
+                      <input type="file" className="adjuntar-in" accept="image/*,video/*" aria-label="Adjuntar fotos y videos" />
+                    </label>
+                    {" "}
+                    <label className="adjuntar-op">
+                      <span className="adjuntar-ic" style={sx("background: #FF836C; color: #8A1428")}>
+                        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M9 18V6l11-2v12"></path>
+                          <circle cx="6" cy="18" r="3"></circle>
+                          <circle cx="17" cy="16" r="3"></circle>
+                        </svg>
+                      </span>
+                      Audio
+                      <input type="file" className="adjuntar-in" accept="audio/*" aria-label="Adjuntar audio" />
+                    </label>
+                    {" "}
+                    <label className="adjuntar-op">
+                      <span className="adjuntar-ic" style={sx("background: #AC0B32; color: #FFFFFF")}>
+                        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="12" cy="8" r="4"></circle>
+                          <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"></path>
+                        </svg>
+                      </span>
+                      Contacto
+                      <input type="file" className="adjuntar-in" accept=".vcf,text/vcard" aria-label="Adjuntar contacto" />
+                    </label>
+                    {" "}
+                  </div>
+                  {" "}
+                </details>
                 {" "}
                 <label style={sx("flex: 1 1 auto; min-width: 0; display: flex")}>
                   {" "}
@@ -585,7 +662,7 @@ export default function Chat(props) {
             {v.contactosAbiertos ? (
               <>
                 {" "}
-                <aside id="panel-contactos" className="panel estado" aria-labelledby="t-contactos">
+                <aside data-guia="contactos" id="panel-contactos" className="panel estado" aria-labelledby="t-contactos">
                   {" "}
                   <div style={sx("display: flex; align-items: center; gap: 8px")}>
                     {" "}

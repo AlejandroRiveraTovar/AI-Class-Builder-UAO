@@ -10,7 +10,7 @@ constructor(props) {
 super(props);
 this.state = { decision: null, borrador: '', extra: [], cuestionario: false };
 }
-renderVals() {
+renderValsPagina() {
 var self = this;
 var d = this.state.decision;
 var lista = [
@@ -73,6 +73,23 @@ self.setState({ extra: self.state.extra.concat([{ texto: t }]), borrador: '' });
 extra: this.state.extra
 };
 }
+
+renderVals() { return Object.assign({}, this.renderValsPagina(), this.usuarioVals()); }
+// rol:inicio
+usuarioVals() {
+var rol = 'docente';
+try { rol = window.localStorage.getItem('aicb-rol') === 'ceedi' ? 'ceedi' : 'docente'; } catch (e) { rol = 'docente'; }
+var ceedi = rol === 'ceedi';
+return {
+usrTrayHref: ceedi ? '#/ceedi/trayectorias' : '#/mis-trayectorias',
+usrTrayTexto: ceedi ? 'Trayectorias' : 'Mis trayectorias',
+usrPerfilHref: ceedi ? '#/ceedi/perfil' : '#/perfil',
+usrNombre: ceedi ? 'Laura Gómez' : 'Juan Martínez',
+usrRol: ceedi ? 'Colaboradora CEEDi' : 'Docente UAO',
+usrIni: ceedi ? 'LG' : 'JM'
+};
+}
+// rol:fin
 }
 
 export default function AsistenteEvaluacion(props) {
@@ -98,8 +115,8 @@ export default function AsistenteEvaluacion(props) {
               <ol style={sx("list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 2px 10px; font-size: 14px; color: #8A1428")}>
                 {" "}
                 <li>
-                  <a href="#/mis-trayectorias" style={sx("display: inline-flex; align-items: center; min-height: 36px; font-weight: 600; color: #FF051E; text-underline-offset: 3px")}>
-                    Mis trayectorias
+                  <a href={v.usrTrayHref} style={sx("display: inline-flex; align-items: center; min-height: 36px; font-weight: 600; color: #FF051E; text-underline-offset: 3px")}>
+                    {v.usrTrayTexto}
                   </a>
                 </li>
                 {" "}
@@ -126,7 +143,7 @@ export default function AsistenteEvaluacion(props) {
             {" "}
           </div>
           {" "}
-          <header style={sx("display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 12px clamp(16px, 3vw, 32px) 18px; background: #FFFFFF; border-bottom: 1px solid #F1E4D3")}>
+          <header data-guia="encabezado" style={sx("display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 12px clamp(16px, 3vw, 32px) 18px; background: #FFFFFF; border-bottom: 1px solid #F1E4D3")}>
             {" "}
             <span style={sx("flex: none; width: 48px; height: 48px; border-radius: 14px; background: #AC0B32; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center")}>
               {" "}
@@ -418,7 +435,7 @@ export default function AsistenteEvaluacion(props) {
                 {v.pendiente ? (
                   <>
                     {" "}
-                    <div style={sx("display: flex; flex-wrap: wrap; gap: 8px")}>
+                    <div data-guia="propuesta" style={sx("display: flex; flex-wrap: wrap; gap: 8px")}>
                       {" "}
                       <button type="button" className="btn-pri" onClick={v.aceptar}>
                         <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -506,15 +523,75 @@ export default function AsistenteEvaluacion(props) {
             {" "}
           </div>
           {" "}
-          <form onSubmit={v.enviar} style={sx("padding: 16px clamp(16px, 3vw, 32px) 24px; background: #FFFFFF; border-top: 1px solid #F1E4D3")}>
+          <form data-guia="mensaje" onSubmit={v.enviar} style={sx("padding: 16px clamp(16px, 3vw, 32px) 24px; background: #FFFFFF; border-top: 1px solid #F1E4D3")}>
             {" "}
             <div style={sx("display: flex; align-items: center; gap: 8px; padding: 6px 6px 6px 8px; border-radius: 14px; border: 1.5px solid #F1E4D3; background: #FBF5EC")}>
               {" "}
-              <button type="button" aria-label="Adjuntar archivo" title="Adjuntar archivo" style={sx("flex: none; width: 44px; height: 44px; border-radius: 10px; border: 0; background: transparent; color: #8A1428; display: inline-flex; align-items: center; justify-content: center; cursor: pointer")}>
-                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M20 11.5l-8 8a5 5 0 0 1-7-7l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7l-8.3 8.3a1.7 1.7 0 0 1-2.4-2.4l7.6-7.6"></path>
-                </svg>
-              </button>
+              <details className="adjuntar">
+                {" "}
+                <summary aria-label="Adjuntar" title="Adjuntar" style={sx("flex: none; width: 44px; height: 44px; border-radius: 10px; border: 0; background: transparent; color: #8A1428; display: inline-flex; align-items: center; justify-content: center; cursor: pointer")}>
+                  <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20 11.5l-8 8a5 5 0 0 1-7-7l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7l-8.3 8.3a1.7 1.7 0 0 1-2.4-2.4l7.6-7.6"></path>
+                  </svg>
+                </summary>
+                {" "}
+                <div className="adjuntar-menu" role="group" aria-label="Adjuntar">
+                  {" "}
+                  <span className="adjuntar-tit" aria-hidden="true">
+                    Adjuntar
+                  </span>
+                  {" "}
+                  <label className="adjuntar-op">
+                    <span className="adjuntar-ic" style={sx("background: #FF051E; color: #FFFFFF")}>
+                      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path>
+                        <path d="M14 3v5h5"></path>
+                        <path d="M9 13h6"></path>
+                        <path d="M9 17h4"></path>
+                      </svg>
+                    </span>
+                    Documento
+                    <input type="file" className="adjuntar-in" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv" aria-label="Adjuntar documento" />
+                  </label>
+                  {" "}
+                  <label className="adjuntar-op">
+                    <span className="adjuntar-ic" style={sx("background: #8A1428; color: #FBF5EC")}>
+                      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+                        <circle cx="9" cy="10" r="2"></circle>
+                        <path d="M21 16l-5-5-9 9"></path>
+                      </svg>
+                    </span>
+                    Fotos y videos
+                    <input type="file" className="adjuntar-in" accept="image/*,video/*" aria-label="Adjuntar fotos y videos" />
+                  </label>
+                  {" "}
+                  <label className="adjuntar-op">
+                    <span className="adjuntar-ic" style={sx("background: #FF836C; color: #8A1428")}>
+                      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M9 18V6l11-2v12"></path>
+                        <circle cx="6" cy="18" r="3"></circle>
+                        <circle cx="17" cy="16" r="3"></circle>
+                      </svg>
+                    </span>
+                    Audio
+                    <input type="file" className="adjuntar-in" accept="audio/*" aria-label="Adjuntar audio" />
+                  </label>
+                  {" "}
+                  <label className="adjuntar-op">
+                    <span className="adjuntar-ic" style={sx("background: #AC0B32; color: #FFFFFF")}>
+                      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="8" r="4"></circle>
+                        <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"></path>
+                      </svg>
+                    </span>
+                    Contacto
+                    <input type="file" className="adjuntar-in" accept=".vcf,text/vcard" aria-label="Adjuntar contacto" />
+                  </label>
+                  {" "}
+                </div>
+                {" "}
+              </details>
               {" "}
               <label style={sx("flex: 1 1 auto; min-width: 0; display: flex")}>
                 <span style={sx("position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)")}>
@@ -623,7 +700,7 @@ export default function AsistenteEvaluacion(props) {
             {" "}
           </ol>
           {" "}
-          <div style={sx("flex: none; margin-top: auto; position: relative; overflow: hidden; border-radius: 18px; background: #FF051E; color: #FFFFFF; padding: 22px 22px 70px; display: flex; flex-direction: column; gap: 10px")}>
+          <div data-guia="siguiente" style={sx("flex: none; margin-top: auto; position: relative; overflow: hidden; border-radius: 18px; background: #FF051E; color: #FFFFFF; padding: 22px 22px 70px; display: flex; flex-direction: column; gap: 10px")}>
             {" "}
             <div aria-hidden="true" style={sx("position: absolute; left: 50%; bottom: -190px; width: 260px; height: 240px; margin-left: -130px; border-radius: 50%; background: #FFFFFF")}></div>
             {" "}

@@ -21,7 +21,7 @@ aporte: '',
 consiento: false, guardado: false
 };
 }
-renderVals() {
+renderValsPagina() {
 var self = this;
 var s = this.state;
 var set = function (k) { return function (e) { var o = {}; o[k] = e.target.value; o.guardado = false; self.setState(o); }; };
@@ -110,6 +110,23 @@ botonIcono: ultimo ? 'M5 12l5 5 9-10' : 'M5 12h14M13 6l6 6-6 6',
 botonEstilo: 'display: inline-flex; align-items: center; gap: 8px; min-height: 50px; padding: 0 24px; border-radius: 12px; border: 0; font-family: inherit; font-size: 16px; font-weight: 700; ' + (bloqueado ? 'background: #F1E4D3; color: #A1434F; cursor: not-allowed' : 'background: #FF051E; color: #FFFFFF; cursor: pointer')
 };
 }
+
+renderVals() { return Object.assign({}, this.renderValsPagina(), this.usuarioVals()); }
+// rol:inicio
+usuarioVals() {
+var rol = 'docente';
+try { rol = window.localStorage.getItem('aicb-rol') === 'ceedi' ? 'ceedi' : 'docente'; } catch (e) { rol = 'docente'; }
+var ceedi = rol === 'ceedi';
+return {
+usrTrayHref: ceedi ? '#/ceedi/trayectorias' : '#/mis-trayectorias',
+usrTrayTexto: ceedi ? 'Trayectorias' : 'Mis trayectorias',
+usrPerfilHref: ceedi ? '#/ceedi/perfil' : '#/perfil',
+usrNombre: ceedi ? 'Laura Gómez' : 'Juan Martínez',
+usrRol: ceedi ? 'Colaboradora CEEDi' : 'Docente UAO',
+usrIni: ceedi ? 'LG' : 'JM'
+};
+}
+// rol:fin
 }
 
 export default function Contextualizacion(props) {
@@ -133,8 +150,8 @@ export default function Contextualizacion(props) {
             <ol style={sx("list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 2px 10px; font-size: 14px; color: #8A1428")}>
               {" "}
               <li>
-                <a href="#/mis-trayectorias" style={sx("display: inline-flex; align-items: center; min-height: 36px; font-weight: 600; color: #FF051E; text-underline-offset: 3px")}>
-                  Mis trayectorias
+                <a href={v.usrTrayHref} style={sx("display: inline-flex; align-items: center; min-height: 36px; font-weight: 600; color: #FF051E; text-underline-offset: 3px")}>
+                  {v.usrTrayTexto}
                 </a>
               </li>
               {" "}
@@ -167,7 +184,7 @@ export default function Contextualizacion(props) {
               {" "}
             </div>
             {" "}
-            <span role="status" style={sx("display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 14px; border-radius: 999px; background: #FFFFFF; border: 1px solid #F1E4D3; font-size: 14px; font-weight: 600")}>
+            <span data-guia="borrador" role="status" style={sx("display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 14px; border-radius: 999px; background: #FFFFFF; border: 1px solid #F1E4D3; font-size: 14px; font-weight: 600")}>
               {" "}
               <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF051E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M7 18a4.5 4.5 0 0 1-.6-9A6 6 0 0 1 18 9.5a4 4 0 0 1-.5 8.5z"></path>
@@ -178,7 +195,7 @@ export default function Contextualizacion(props) {
             {" "}
           </div>
           {" "}
-          <nav aria-label="Partes de la contextualización" style={sx("background: #FFFFFF; border-radius: 18px; padding: 16px 20px 18px; display: flex; flex-direction: column; gap: 14px")}>
+          <nav data-guia="partes" aria-label="Partes de la contextualización" style={sx("background: #FFFFFF; border-radius: 18px; padding: 16px 20px 18px; display: flex; flex-direction: column; gap: 14px")}>
             {" "}
             <ol style={sx("list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px")}>
               {" "}
@@ -225,7 +242,7 @@ export default function Contextualizacion(props) {
             {" "}
           </nav>
           {" "}
-          <form onSubmit={v.siguiente} style={sx("background: #FFFFFF; border-radius: 18px; padding: 28px clamp(18px, 3vw, 36px); display: flex; flex-direction: column; gap: 22px")}>
+          <form data-guia="formulario" onSubmit={v.siguiente} style={sx("background: #FFFFFF; border-radius: 18px; padding: 28px clamp(18px, 3vw, 36px); display: flex; flex-direction: column; gap: 22px")}>
             {" "}
             {v.v1 ? (
               <>
@@ -863,7 +880,7 @@ export default function Contextualizacion(props) {
               </>
             ) : null}
             {" "}
-            <div style={sx("display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding-top: 20px; border-top: 1px solid #F1E4D3")}>
+            <div data-guia="pie" style={sx("display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding-top: 20px; border-top: 1px solid #F1E4D3")}>
               {" "}
               <span className="ayuda">
                 <b style={sx("color: #FF051E")}>
@@ -877,7 +894,7 @@ export default function Contextualizacion(props) {
                 {v.v1 ? (
                   <>
                     {" "}
-                    <a href="#/mis-trayectorias" className="btn-sec">
+                    <a href={v.usrTrayHref} className="btn-sec">
                       Cancelar
                     </a>
                     {" "}

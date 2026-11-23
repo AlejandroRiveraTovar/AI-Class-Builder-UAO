@@ -6,7 +6,24 @@ import './AnaliticaTrayectoria.css';
 
 // Lógica y datos de la página (estado local, sin servidor).
 class Logic extends PageLogic {
-renderVals() { return {}; }
+renderValsPagina() { return {}; }
+
+renderVals() { return Object.assign({}, this.renderValsPagina(), this.usuarioVals()); }
+// rol:inicio
+usuarioVals() {
+var rol = 'docente';
+try { rol = window.localStorage.getItem('aicb-rol') === 'ceedi' ? 'ceedi' : 'docente'; } catch (e) { rol = 'docente'; }
+var ceedi = rol === 'ceedi';
+return {
+usrTrayHref: ceedi ? '#/ceedi/trayectorias' : '#/mis-trayectorias',
+usrTrayTexto: ceedi ? 'Trayectorias' : 'Mis trayectorias',
+usrPerfilHref: ceedi ? '#/ceedi/perfil' : '#/perfil',
+usrNombre: ceedi ? 'Laura Gómez' : 'Juan Martínez',
+usrRol: ceedi ? 'Colaboradora CEEDi' : 'Docente UAO',
+usrIni: ceedi ? 'LG' : 'JM'
+};
+}
+// rol:fin
 }
 
 export default function AnaliticaTrayectoria(props) {
@@ -30,8 +47,8 @@ export default function AnaliticaTrayectoria(props) {
             <ol style={sx("list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 2px 10px; font-size: 14px; color: #8A1428")}>
               {" "}
               <li>
-                <a href="#/mis-trayectorias" style={sx("display: inline-flex; align-items: center; min-height: 36px; font-weight: 600; color: #FF051E; text-underline-offset: 3px")}>
-                  Mis trayectorias
+                <a href={v.usrTrayHref} style={sx("display: inline-flex; align-items: center; min-height: 36px; font-weight: 600; color: #FF051E; text-underline-offset: 3px")}>
+                  {v.usrTrayTexto}
                 </a>
               </li>
               {" "}
@@ -80,7 +97,7 @@ export default function AnaliticaTrayectoria(props) {
             {" "}
           </div>
           {" "}
-          <section aria-label="Ficha del docente y del proceso" style={sx("position: relative; overflow: hidden; border-radius: 20px; background: #FF051E; color: #FFFFFF; padding: 28px 32px; display: flex; flex-wrap: wrap; gap: 24px 48px")}>
+          <section data-guia="ficha" aria-label="Ficha del docente y del proceso" style={sx("position: relative; overflow: hidden; border-radius: 20px; background: #FF051E; color: #FFFFFF; padding: 28px 32px; display: flex; flex-wrap: wrap; gap: 24px 48px")}>
             {" "}
             <div aria-hidden="true" style={sx("position: absolute; right: -80px; bottom: -250px; width: 420px; height: 340px; border-radius: 50%; background: #FBF5EC")}></div>
             {" "}
@@ -174,7 +191,7 @@ export default function AnaliticaTrayectoria(props) {
             {" "}
           </section>
           {" "}
-          <section aria-labelledby="t-kpi" style={sx("display: flex; flex-direction: column; gap: 14px")}>
+          <section data-guia="indicadores" aria-labelledby="t-kpi" style={sx("display: flex; flex-direction: column; gap: 14px")}>
             {" "}
             <h2 id="t-kpi" className="vh">
               Indicadores clave
@@ -275,7 +292,7 @@ export default function AnaliticaTrayectoria(props) {
             {" "}
           </section>
           {" "}
-          <div className="dos">
+          <div data-guia="etapas" className="dos">
             {" "}
             <section className="caja" aria-labelledby="t-etapas" style={sx("flex: 3 1 640px")}>
               {" "}
@@ -528,7 +545,7 @@ export default function AnaliticaTrayectoria(props) {
             {" "}
           </div>
           {" "}
-          <section aria-labelledby="t-ia" style={sx("display: flex; flex-direction: column; gap: 14px")}>
+          <section data-guia="ia" aria-labelledby="t-ia" style={sx("display: flex; flex-direction: column; gap: 14px")}>
             {" "}
             <div style={sx("display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px")}>
               {" "}
@@ -739,7 +756,7 @@ export default function AnaliticaTrayectoria(props) {
             {" "}
           </section>
           {" "}
-          <div className="dos">
+          <div data-guia="actividad" className="dos">
             {" "}
             <section className="caja" aria-labelledby="t-act" style={sx("flex: 1 1 520px")}>
               {" "}
@@ -1088,7 +1105,7 @@ export default function AnaliticaTrayectoria(props) {
             {" "}
           </section>
           {" "}
-          <section aria-labelledby="t-priv" style={sx("display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 26px; border-radius: 18px; background: #8A1428; color: #FBF5EC")}>
+          <section data-guia="privacidad" aria-labelledby="t-priv" style={sx("display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 26px; border-radius: 18px; background: #8A1428; color: #FBF5EC")}>
             {" "}
             <div style={sx("flex: 1 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 4px")}>
               {" "}

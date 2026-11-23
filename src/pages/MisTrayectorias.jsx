@@ -13,11 +13,10 @@ this.state = { filtro: 'todas', q: '', borrar: null, borradas: [], aviso: '' };
 renderVals() {
 var self = this;
 var data = [
-{ programa: 'Ingeniería Multimedia', asignatura: 'Diseño Web', docente: 'Juan Martínez', estado: 'En progreso', creada: '15/09/2026', editada: '28/09/2026' },
-{ programa: 'Ingeniería Industrial', asignatura: 'Gestión de Proyectos', docente: 'Laura Gómez', estado: 'Pendiente', creada: '18/09/2026', editada: '25/09/2026' },
-{ programa: 'Administración', asignatura: 'Economía', docente: 'Carlos Rengifo', estado: 'Completada', creada: '02/09/2026', editada: '25/09/2026' },
-{ programa: 'Diseño', asignatura: 'Taller de Creatividad', docente: 'Juan Martínez', estado: 'En progreso', creada: '10/09/2026', editada: '22/09/2026' },
-{ programa: 'Psicología', asignatura: 'Procesos Cognitivos', docente: 'Ana María Torres', estado: 'Pendiente', creada: '12/09/2026', editada: '20/09/2026' }
+{ programa: 'Ingeniería Multimedia', asignatura: 'Diseño Web', docente: 'Juan Martínez', estado: 'En progreso', avance: 60, creada: '15/09/2026', editada: '28/09/2026' },
+{ programa: 'Diseño de la Comunicación Gráfica', asignatura: 'Taller de Creatividad', docente: 'Juan Martínez', estado: 'En progreso', avance: 35, creada: '10/09/2026', editada: '22/09/2026' },
+{ programa: 'Ingeniería Multimedia', asignatura: 'Interacción Humano-Computador', docente: 'Juan Martínez', estado: 'Completada', avance: 100, creada: '04/08/2026', editada: '30/08/2026' },
+{ programa: 'Ingeniería Multimedia', asignatura: 'Animación Digital', docente: 'Juan Martínez', estado: 'Pendiente', avance: 10, creada: '18/09/2026', editada: '19/09/2026' }
 ];
 var pill = {
 'Pendiente': ['background: #FFFFFF; color: #AC0B32; border: 1.5px solid #AC0B32', 'background: #AC0B32'],
@@ -31,13 +30,13 @@ var f = this.state.filtro;
 var rows = data.filter(function (r) {
 if (self.state.borradas.indexOf(r.asignatura) >= 0) return false;
 var okF = f === 'todas' || r.estado === f;
-var okQ = !q || (r.asignatura + ' ' + r.programa + ' ' + r.docente).toLowerCase().indexOf(q) >= 0;
+var okQ = !q || (r.asignatura + ' ' + r.programa).toLowerCase().indexOf(q) >= 0;
 return okF && okQ;
-}).map(function (r) {
+}).map(function (r, i) {
 var partes = r.docente.split(' ');
 var ini = (partes[0].charAt(0) + partes[partes.length - 1].charAt(0)).toUpperCase();
 var yo = r.docente === 'Juan Martínez';
-return Object.assign({}, r, { iniciales: ini, rol: yo ? 'Tú' : 'Docente UAO', pillStyle: base + pill[r.estado][0], dotStyle: dot + pill[r.estado][1], pedirBorrar: function () { self.setState({ borrar: r.asignatura }); } });
+return Object.assign({}, r, { guiaAcciones: i === 0 ? 'acciones' : '', iniciales: ini, rol: yo ? 'Tú' : 'Docente UAO', barra: 'width: ' + r.avance + '%; height: 100%; border-radius: 999px; background: ' + (r.avance === 100 ? '#8A1428' : '#FF051E'), pillStyle: base + pill[r.estado][0], dotStyle: dot + pill[r.estado][1], pedirBorrar: function () { self.setState({ borrar: r.asignatura }); } });
 });
 var chipDefs = [
 { id: 'todas', label: 'Todas' },
@@ -56,6 +55,8 @@ pick: function () { self.setState({ filtro: c.id }); }
 });
 return {
 rows: rows,
+totalVisibles: rows.length,
+totalTrayectorias: data.length - self.state.borradas.length,
 chips: chips,
 q: this.state.q,
 empty: rows.length === 0,
@@ -69,6 +70,7 @@ deshacer: function () { var b = self.state.borradas.slice(0, -1); self.setState(
 onSearch: function (e) { self.setState({ q: e.target.value }); }
 };
 }
+
 }
 
 export default function MisTrayectorias(props) {
@@ -100,7 +102,7 @@ export default function MisTrayectorias(props) {
               </h1>
               {" "}
               <p style={sx("margin: 0; font-size: 17px; line-height: 1.5")}>
-                Continúa el diseño de tus cursos o crea una nueva trayectoria.
+                Aquí ves solo las trayectorias que creaste. Continúa su diseño o crea una nueva.
               </p>
               {" "}
             </div>
@@ -151,7 +153,7 @@ export default function MisTrayectorias(props) {
             {" "}
           </div>
           {" "}
-          <div style={sx("display: flex; flex-wrap: wrap; align-items: center; gap: 16px")}>
+          <div data-guia="filtros" style={sx("display: flex; flex-wrap: wrap; align-items: center; gap: 16px")}>
             {" "}
             <label style={sx("flex: 1 1 320px; min-width: 0; display: flex; align-items: center; gap: 10px; min-height: 50px; padding: 0 16px; border-radius: 12px; background: #FFFFFF; border: 1.5px solid #F1E4D3")}>
               {" "}
@@ -164,7 +166,7 @@ export default function MisTrayectorias(props) {
                 Buscar trayectoria
               </span>
               {" "}
-              <input type="search" value={v.q ?? ''} onChange={v.onSearch} placeholder="Buscar por trayectoria, programa o docente" style={sx("flex: 1 1 auto; min-width: 0; border: 0; outline: none; background: transparent; font-family: inherit; font-size: 16px; color: #8A1428")} />
+              <input type="search" value={v.q ?? ''} onChange={v.onSearch} placeholder="Buscar por trayectoria o programa" style={sx("flex: 1 1 auto; min-width: 0; border: 0; outline: none; background: transparent; font-family: inherit; font-size: 16px; color: #8A1428")} />
               {" "}
             </label>
             {" "}
@@ -184,7 +186,7 @@ export default function MisTrayectorias(props) {
             {" "}
           </div>
           {" "}
-          <div style={sx("background: #FFFFFF; border-radius: 18px; overflow: hidden")}>
+          <div data-guia="tabla" style={sx("background: #FFFFFF; border-radius: 18px; overflow: hidden")}>
             {" "}
             <div style={sx("overflow-x: auto")}>
               {" "}
@@ -201,7 +203,7 @@ export default function MisTrayectorias(props) {
                       Programa
                     </th>
                     <th scope="col" style={sx("padding: 16px 20px; font-size: 14px; font-weight: 700")}>
-                      Creada por
+                      Avance
                     </th>
                     <th scope="col" style={sx("padding: 16px 20px; font-size: 14px; font-weight: 700")}>
                       Estado
@@ -228,17 +230,12 @@ export default function MisTrayectorias(props) {
                           {r?.programa}
                         </td>
                         <td style={sx("padding: 14px 20px")}>
-                          <span style={sx("display: inline-flex; align-items: center; gap: 10px; white-space: nowrap")}>
-                            <span aria-hidden="true" style={sx("flex: none; width: 32px; height: 32px; border-radius: 50%; background: #FBF5EC; border: 1.5px solid #FF836C; color: #8A1428; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800")}>
-                              {r?.iniciales}
+                          <span role="img" aria-label={`Avance del ${r?.avance ?? ''} %`} style={sx("display: inline-flex; align-items: center; gap: 10px; white-space: nowrap")}>
+                            <span aria-hidden="true" style={sx("width: 96px; height: 8px; border-radius: 999px; background: #F1E4D3; overflow: hidden; display: inline-flex")}>
+                              <span style={sx(r?.barra)}></span>
                             </span>
-                            <span style={sx("display: flex; flex-direction: column; line-height: 1.25")}>
-                              <span style={sx("font-weight: 600")}>
-                                {r?.docente}
-                              </span>
-                              <span style={sx("font-size: 13px; color: #A1434F")}>
-                                {r?.rol}
-                              </span>
+                            <span style={sx("font-size: 14px; font-weight: 700")}>
+                              {r?.avance}{" "}%
                             </span>
                           </span>
                         </td>
@@ -256,7 +253,7 @@ export default function MisTrayectorias(props) {
                         </td>
                         <td style={sx("padding: 10px 20px")}>
                           {" "}
-                          <div style={sx("display: flex; justify-content: flex-end; gap: 6px")}>
+                          <div data-guia={r?.guiaAcciones} style={sx("display: flex; justify-content: flex-end; gap: 6px")}>
                             {" "}
                             <a href="#/vista-previa" aria-label={`Ver vista previa de ${r?.asignatura ?? ''}`} title="Ver vista previa" style={sx("box-sizing: border-box; width: 44px; height: 44px; border-radius: 10px; border: 1px solid #F1E4D3; background: #FBF5EC; color: #8A1428; display: inline-flex; align-items: center; justify-content: center")}>
                               {" "}
@@ -348,53 +345,14 @@ export default function MisTrayectorias(props) {
             <p style={sx("margin: 0; font-size: 15px")}>
               Mostrando{" "}
               <strong>
-                1–5
+                {v.totalVisibles}
               </strong>
               {" "}de{" "}
               <strong>
-                23
+                {v.totalTrayectorias}
               </strong>
-              {" "}trayectorias · Página{" "}
-              <strong>
-                1
-              </strong>
-              {" "}de{" "}
-              <strong>
-                5
-              </strong>
+              {" "}trayectorias creadas por ti
             </p>
-            {" "}
-            <nav aria-label="Paginación" style={sx("display: flex; flex-wrap: wrap; gap: 6px")}>
-              {" "}
-              <button type="button" disabled style={sx("min-height: 44px; padding: 0 14px; border-radius: 10px; border: 1px solid #F1E4D3; background: transparent; color: #C58A93; font-family: inherit; font-size: 15px; font-weight: 600")}>
-                Anterior
-              </button>
-              {" "}
-              <button type="button" aria-current="page" style={sx("min-width: 44px; min-height: 44px; border-radius: 10px; border: 0; background: #FF051E; color: #FFFFFF; font-family: inherit; font-size: 15px; font-weight: 700")}>
-                1
-              </button>
-              {" "}
-              <button type="button" style={sx("min-width: 44px; min-height: 44px; border-radius: 10px; border: 1px solid #F1E4D3; background: #FFFFFF; color: #8A1428; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer")}>
-                2
-              </button>
-              {" "}
-              <button type="button" style={sx("min-width: 44px; min-height: 44px; border-radius: 10px; border: 1px solid #F1E4D3; background: #FFFFFF; color: #8A1428; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer")}>
-                3
-              </button>
-              {" "}
-              <button type="button" style={sx("min-width: 44px; min-height: 44px; border-radius: 10px; border: 1px solid #F1E4D3; background: #FFFFFF; color: #8A1428; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer")}>
-                4
-              </button>
-              {" "}
-              <button type="button" style={sx("min-width: 44px; min-height: 44px; border-radius: 10px; border: 1px solid #F1E4D3; background: #FFFFFF; color: #8A1428; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer")}>
-                5
-              </button>
-              {" "}
-              <button type="button" style={sx("min-height: 44px; padding: 0 14px; border-radius: 10px; border: 1px solid #8A1428; background: #FFFFFF; color: #8A1428; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer")}>
-                Siguiente
-              </button>
-              {" "}
-            </nav>
             {" "}
           </div>
           {" "}

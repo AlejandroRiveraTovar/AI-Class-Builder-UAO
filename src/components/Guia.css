@@ -1,0 +1,27 @@
+/* Guía de la página: los mismos estilos que en el lienzo de Claude Design. */
+/* Guía de la página */
+.guia-fondo{position:fixed;inset:0;z-index:1000}
+.guia-foco{position:fixed;z-index:1001;border-radius:14px;pointer-events:none;box-shadow:0 0 0 3px #FF051E,0 0 0 9999px rgba(66,10,20,0.6);transition:top .3s ease,left .3s ease,width .3s ease,height .3s ease}
+.guia-tarjeta{position:fixed;z-index:1002;box-sizing:border-box;width:380px;max-width:calc(100vw - 32px);padding:20px 22px 16px;border-radius:18px;background:#FFFFFF;color:#8A1428;font-family:'DM Sans',sans-serif;box-shadow:0 24px 60px rgba(66,10,20,0.35);display:flex;flex-direction:column;gap:12px;outline:none;transition:top .3s ease,left .3s ease}
+.guia-cab{display:flex;align-items:center;gap:10px}
+.guia-icono{flex:none;width:32px;height:32px;border-radius:50%;background:#FF051E;color:#FFFFFF;display:inline-flex;align-items:center;justify-content:center}
+.guia-etq{flex:1 1 auto;font-size:13px;font-weight:700;color:#AC0B32}
+.guia-x{flex:none;width:44px;height:44px;margin:-8px -10px -8px 0;border:0;border-radius:10px;background:transparent;color:#8A1428;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.guia-x:hover{background:#FBF5EC}
+.guia-titulo{margin:0;font-size:20px;line-height:1.25;font-weight:800;color:#8A1428}
+.guia-texto{margin:0;font-size:15px;line-height:1.55;color:#8A1428}
+.guia-barra{display:flex;gap:4px;padding-top:2px}
+.guia-barra span{flex:1 1 0;height:6px;border-radius:999px;background:#F1E4D3}
+.guia-barra span.hecho{background:#FF051E}
+.guia-pie{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
+.guia-paso{font-size:14px;font-weight:700}
+.guia-botones{display:flex;gap:8px}
+.guia-btn{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 16px;border-radius:10px;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer}
+.guia-btn-sec{border:1.5px solid #8A1428;background:#FFFFFF;color:#8A1428}
+.guia-btn-sec:hover{background:#FBF5EC}
+.guia-btn-pri{border:0;background:#FF051E;color:#FFFFFF}
+.guia-btn-pri:hover{background:#AC0B32}
+.guia-omitir{align-self:center;min-height:36px;padding:0 10px;border:0;background:transparent;color:#A1434F;font-family:inherit;font-size:14px;font-weight:600;text-decoration:underline;cursor:pointer}
+.guia-omitir:hover{color:#8A1428}
+.guia-x:focus-visible,.guia-btn:focus-visible,.guia-omitir:focus-visible{outline:2px solid #FF051E;outline-offset:2px}
+@media (prefers-reduced-motion: reduce){.guia-foco,.guia-tarjeta{transition:none}}

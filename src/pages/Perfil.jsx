@@ -46,6 +46,7 @@ descartar: function () { self.setState(Object.assign({}, self.base, { guardado: 
 botonEstilo: 'display: inline-flex; align-items: center; gap: 8px; min-height: 50px; padding: 0 22px; border-radius: 12px; border: 0; font-family: inherit; font-size: 16px; font-weight: 700; ' + (cambios ? 'background: #FF051E; color: #FFFFFF; cursor: pointer' : 'background: #F1E4D3; color: #A1434F; cursor: not-allowed')
 };
 }
+
 }
 
 export default function Perfil(props) {
@@ -83,7 +84,7 @@ export default function Perfil(props) {
           {" "}
           <div style={sx("display: flex; flex-wrap: wrap; align-items: flex-start; gap: 24px")}>
             {" "}
-            <form onSubmit={v.guardar} style={sx("flex: 2 1 640px; min-width: 0; background: #FFFFFF; border-radius: 18px; padding: 28px clamp(18px, 3vw, 32px); display: flex; flex-direction: column; gap: 22px")}>
+            <form data-guia="datos" onSubmit={v.guardar} style={sx("flex: 2 1 640px; min-width: 0; background: #FFFFFF; border-radius: 18px; padding: 28px clamp(18px, 3vw, 32px); display: flex; flex-direction: column; gap: 22px")}>
               {" "}
               <div style={sx("display: flex; flex-wrap: wrap; align-items: center; gap: 20px; padding-bottom: 22px; border-bottom: 1px solid #F1E4D3")}>
                 {" "}
@@ -278,7 +279,7 @@ export default function Perfil(props) {
             {" "}
             <div style={sx("flex: 1 1 340px; min-width: 0; display: flex; flex-direction: column; gap: 24px")}>
               {" "}
-              <section aria-labelledby="t-avance" style={sx("background: #FFFFFF; border-radius: 18px; padding: 26px; display: flex; flex-direction: column; gap: 18px")}>
+              <section data-guia="avance" aria-labelledby="t-avance" style={sx("background: #FFFFFF; border-radius: 18px; padding: 26px; display: flex; flex-direction: column; gap: 18px")}>
                 {" "}
                 <div style={sx("display: flex; flex-direction: column; gap: 2px")}>
                   {" "}
@@ -302,6 +303,10 @@ export default function Perfil(props) {
                 </div>
                 {" "}
                 <div role="img" aria-label="1 completada, 2 en progreso y 1 pendiente" style={sx("display: flex; gap: 3px; height: 14px")}>
+                  {" "}
+                  <span style={sx("flex: 1; border-radius: 999px 0 0 999px; background: #8A1428")}></span>
+                  {" "}
+                  <span style={sx("flex: 2; background: #FF836C")}></span>
                   {" "}
                   <span style={sx("flex: 1; border-radius: 0 999px 999px 0; background: #FFFFFF; border: 1.5px solid #AC0B32; box-sizing: border-box")}></span>
                   {" "}
@@ -385,7 +390,7 @@ export default function Perfil(props) {
                 {" "}
               </section>
               {" "}
-              <section aria-labelledby="t-seguir" style={sx("position: relative; overflow: hidden; border-radius: 18px; background: #FF051E; color: #FFFFFF; padding: 24px 24px 80px; display: flex; flex-direction: column; gap: 10px")}>
+              <section data-guia="seguir" aria-labelledby="t-seguir" style={sx("position: relative; overflow: hidden; border-radius: 18px; background: #FF051E; color: #FFFFFF; padding: 24px 24px 80px; display: flex; flex-direction: column; gap: 10px")}>
                 {" "}
                 <div aria-hidden="true" style={sx("position: absolute; left: 50%; bottom: -230px; width: 340px; height: 290px; margin-left: -170px; border-radius: 50%; background: #FBF5EC")}></div>
                 {" "}

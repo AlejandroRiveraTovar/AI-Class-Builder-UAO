@@ -8,17 +8,17 @@ import './Historial.css';
 class Logic extends PageLogic {
 constructor(props) {
 super(props);
-this.state = { asistente: 'todos', q: '', pedido: null, extra: [], hecho: null };
+this.state = { asistente: 'todos', q: '', pedido: null, extra: [], hecho: null, pagina: 1 };
 }
-renderVals() {
+renderValsPagina() {
 var self = this;
 var base = [
 { id: 'v1.4', fecha: '28/09/2026', hora: '11:45 a. m.', autor: 'Juan Martínez', rol: 'Docente UAO', cambio: 'Ajustes en la matriz de alineación', asistente: 'Diseño microcurricular UAO', color: 3 },
 { id: 'v1.3', fecha: '27/09/2026', hora: '4:32 p. m.', autor: 'Laura Gómez', rol: 'Colaboradora CEEDi', cambio: 'Revisión de rúbricas', asistente: 'Instrumentos de evaluación UAO', color: 0 },
 { id: 'v1.2', fecha: '26/09/2026', hora: '10:15 a. m.', autor: 'Juan Martínez', rol: 'Docente UAO', cambio: 'Actualización de actividades', asistente: 'Diseño microcurricular UAO', color: 3 },
 { id: 'v1.1', fecha: '24/09/2026', hora: '3:20 p. m.', autor: 'Laura Gómez', rol: 'Colaboradora CEEDi', cambio: 'Correcciones de formato', asistente: 'Diseño curricular UAO', color: 0 },
-{ id: 'v1.0', fecha: '22/09/2026', hora: '9:10 a. m.', autor: 'Juan Martínez', rol: 'Docente UAO', cambio: 'Versión inicial', asistente: 'Diseño curricular UAO', color: 3 }
-];
+{ id: 'v1.0', fecha: '22/09/2026', hora: '9:10 a. m.', autor: 'Juan Martínez', rol: 'Docente UAO', cambio: 'Primera versión completa', asistente: 'Diseño curricular UAO', color: 3 }
+].concat(this.versionesAnteriores());
 var paleta = ['background: #FF051E; color: #FFFFFF', 'background: #8A1428; color: #FBF5EC', 'background: #AC0B32; color: #FFFFFF', 'background: #FBF5EC; color: #8A1428; border: 1.5px solid #FF836C'];
 var todas = this.state.extra.concat(base);
 var nuevaId = 'v1.' + (4 + this.state.extra.length + 1);
@@ -30,7 +30,8 @@ var okQ = !q || [v.id, v.fecha, v.autor, v.rol, v.cambio, v.asistente].join(' ')
 return okA && okQ;
 });
 var actualId = todas[0].id;
-var filas = vis.map(function (v) {
+var pag = this.paginador(vis.length, this.state.pagina, 5, 'pagina', { normal: 'min-width: 44px; min-height: 44px; border-radius: 10px; border: 1px solid #F1E4D3; background: #FFFFFF; color: #8A1428; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer', activo: 'min-width: 44px; min-height: 44px; border-radius: 10px; border: 0; background: #FF051E; color: #FFFFFF; font-family: inherit; font-size: 15px; font-weight: 700', flecha: 'min-height: 44px; padding: 0 14px; border-radius: 10px; border: 1px solid #8A1428; background: #FFFFFF; color: #8A1428; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer', apagado: 'min-height: 44px; padding: 0 14px; border-radius: 10px; border: 1px solid #F1E4D3; background: transparent; color: #C58A93; font-family: inherit; font-size: 15px; font-weight: 600; cursor: default' });
+var filas = vis.slice(pag.inicio, pag.inicio + 5).map(function (v) {
 var actual = v.id === actualId;
 var p = v.autor.split(' ');
 var marcada = self.state.pedido === v.id;
@@ -47,10 +48,11 @@ pedirLabel: 'Restaurar la versión ' + v.id
 });
 return {
 asistente: a,
-elegirAsistente: function (e) { self.setState({ asistente: e.target.value }); },
+elegirAsistente: function (e) { self.setState({ asistente: e.target.value, pagina: 1 }); },
 q: this.state.q,
-buscar: function (e) { self.setState({ q: e.target.value }); },
+buscar: function (e) { self.setState({ q: e.target.value, pagina: 1 }); },
 filas: filas,
+pag: pag,
 vacio: filas.length === 0,
 cuenta: filas.length,
 total: todas.length,
@@ -61,13 +63,78 @@ cancelar: function () { self.setState({ pedido: null }); },
 confirmar: function () {
 var origen = todas.filter(function (v) { return v.id === self.state.pedido; })[0];
 var nueva = { id: nuevaId, fecha: '18/10/2026', hora: 'Ahora', autor: 'Juan Martínez', rol: 'Docente UAO', cambio: 'Restauración de ' + origen.id + ': ' + origen.cambio.toLowerCase(), asistente: origen.asistente, color: 3 };
-self.setState({ extra: [nueva].concat(self.state.extra), pedido: null, hecho: 'Restauraste ' + origen.id + '. Ahora es la versión actual (' + nuevaId + ').' });
+self.setState({ extra: [nueva].concat(self.state.extra), pedido: null, pagina: 1, hecho: 'Restauraste ' + origen.id + '. Ahora es la versión actual (' + nuevaId + ').' });
 },
 hecho: !!this.state.hecho,
 hechoTexto: this.state.hecho || '',
 deshacer: function () { self.setState({ extra: self.state.extra.slice(1), hecho: null }); }
 };
 }
+
+// datos:inicio
+versionesAnteriores() {
+var cambios = ['Alineación con el perfil de egreso', 'Revisión del aporte al programa', 'Banco de preguntas de la unidad 1', 'Estrategias de aprendizaje activo', 'Ajuste de la presentación del curso', 'Corrección de referencias', 'Revisión de la secuencia didáctica', 'Nuevas actividades de la unidad 2', 'Ponderación de la rúbrica', 'Ajuste de créditos y horas', 'Redacción de competencias', 'Actualización de conocimientos funcionales', 'Criterios de evaluación por unidad', 'Revisión de resultados de aprendizaje', 'Nuevos indicadores de desempeño', 'Ajuste de la intención pedagógica', 'Primeros resultados de aprendizaje', 'Borrador de la contextualización'];
+var asistentes = ['Diseño microcurricular UAO', 'Instrumentos de evaluación UAO', 'Diseño curricular UAO'];
+var horas = ['5:40 p. m.', '11:05 a. m.', '3:15 p. m.', '9:30 a. m.', '2:10 p. m.', '10:45 a. m.'];
+var dos = function (n) { return (n < 10 ? '0' : '') + n; };
+return cambios.map(function (c, i) {
+var f = new Date(2026, 8, 21 - i);
+var juan = i % 3 !== 1;
+return { id: 'v0.' + (18 - i), fecha: dos(f.getDate()) + '/' + dos(f.getMonth() + 1) + '/' + f.getFullYear(), hora: horas[i % horas.length], autor: juan ? 'Juan Martínez' : 'Laura Gómez', rol: juan ? 'Docente UAO' : 'Colaboradora CEEDi', cambio: c, asistente: asistentes[i % 3], color: juan ? 3 : 0 };
+});
+}
+// datos:fin
+// paginacion:inicio
+paginador(total, pagina, porPagina, clave, estilos) {
+var self = this;
+var paginas = Math.max(1, Math.ceil(total / porPagina));
+var actual = Math.min(Math.max(1, pagina || 1), paginas);
+var ir = function (n) { return function () { var o = {}; o[clave] = n; self.setState(o); }; };
+var nums = [];
+if (paginas <= 7) { for (var i = 1; i <= paginas; i++) nums.push(i); }
+else {
+var a = Math.max(2, actual - 1), b = Math.min(paginas - 1, actual + 1);
+if (actual <= 3) { a = 2; b = 4; }
+if (actual >= paginas - 2) { a = paginas - 3; b = paginas - 1; }
+nums.push(1);
+if (a > 2) nums.push(0);
+for (var j = a; j <= b; j++) nums.push(j);
+if (b < paginas - 1) nums.push(0);
+nums.push(paginas);
+}
+return {
+actual: actual, paginas: paginas, total: total,
+inicio: (actual - 1) * porPagina,
+desde: total ? (actual - 1) * porPagina + 1 : 0,
+hasta: Math.min(total, actual * porPagina),
+sinAnterior: actual === 1, sinSiguiente: actual === paginas,
+estiloAnterior: actual === 1 ? estilos.apagado : estilos.flecha,
+estiloSiguiente: actual === paginas ? estilos.apagado : estilos.flecha,
+anterior: ir(Math.max(1, actual - 1)),
+siguiente: ir(Math.min(paginas, actual + 1)),
+items: nums.map(function (n) {
+return { elipsis: n === 0, numero: n !== 0, n: n, actual: n === actual ? 'page' : 'false', etiqueta: 'Página ' + n, ir: ir(n), estilo: n === actual ? estilos.activo : estilos.normal };
+})
+};
+}
+// paginacion:fin
+
+renderVals() { return Object.assign({}, this.renderValsPagina(), this.usuarioVals()); }
+// rol:inicio
+usuarioVals() {
+var rol = 'docente';
+try { rol = window.localStorage.getItem('aicb-rol') === 'ceedi' ? 'ceedi' : 'docente'; } catch (e) { rol = 'docente'; }
+var ceedi = rol === 'ceedi';
+return {
+usrTrayHref: ceedi ? '#/ceedi/trayectorias' : '#/mis-trayectorias',
+usrTrayTexto: ceedi ? 'Trayectorias' : 'Mis trayectorias',
+usrPerfilHref: ceedi ? '#/ceedi/perfil' : '#/perfil',
+usrNombre: ceedi ? 'Laura Gómez' : 'Juan Martínez',
+usrRol: ceedi ? 'Colaboradora CEEDi' : 'Docente UAO',
+usrIni: ceedi ? 'LG' : 'JM'
+};
+}
+// rol:fin
 }
 
 export default function Historial(props) {
@@ -91,8 +158,8 @@ export default function Historial(props) {
             <ol style={sx("list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 2px 10px; font-size: 14px; color: #8A1428")}>
               {" "}
               <li>
-                <a href="#/mis-trayectorias" style={sx("display: inline-flex; align-items: center; min-height: 36px; font-weight: 600; color: #FF051E; text-underline-offset: 3px")}>
-                  Mis trayectorias
+                <a href={v.usrTrayHref} style={sx("display: inline-flex; align-items: center; min-height: 36px; font-weight: 600; color: #FF051E; text-underline-offset: 3px")}>
+                  {v.usrTrayTexto}
                 </a>
               </li>
               {" "}
@@ -129,7 +196,7 @@ export default function Historial(props) {
           {" "}
           <div style={sx("display: flex; flex-wrap: wrap; align-items: flex-start; gap: 24px")}>
             {" "}
-            <section aria-label="Versiones" style={sx("flex: 3 1 720px; min-width: 0; display: flex; flex-direction: column; gap: 16px")}>
+            <section data-guia="versiones" aria-label="Versiones" style={sx("flex: 3 1 720px; min-width: 0; display: flex; flex-direction: column; gap: 16px")}>
               {" "}
               <div style={sx("display: flex; flex-wrap: wrap; gap: 12px")}>
                 {" "}
@@ -325,49 +392,51 @@ export default function Historial(props) {
                 <p style={sx("margin: 0; font-size: 15px")}>
                   Mostrando{" "}
                   <strong>
-                    1–5
+                    {v.pag?.desde}–{v.pag?.hasta}
                   </strong>
                   {" "}de{" "}
                   <strong>
-                    23
+                    {v.pag?.total}
                   </strong>
                   {" "}versiones · Página{" "}
                   <strong>
-                    1
+                    {v.pag?.actual}
                   </strong>
                   {" "}de{" "}
                   <strong>
-                    5
+                    {v.pag?.paginas}
                   </strong>
                 </p>
                 {" "}
                 <nav aria-label="Paginación" style={sx("display: flex; flex-wrap: wrap; gap: 6px")}>
                   {" "}
-                  <button type="button" disabled style={sx("min-height: 44px; padding: 0 14px; border-radius: 10px; border: 1px solid #F1E4D3; background: transparent; color: #C58A93; font-family: inherit; font-size: 15px; font-weight: 600")}>
+                  <button type="button" onClick={v.pag?.anterior} disabled={!!v.pag?.sinAnterior} aria-label="Página anterior" style={sx(v.pag?.estiloAnterior)}>
                     Anterior
                   </button>
                   {" "}
-                  <button type="button" aria-current="page" style={sx("min-width: 44px; min-height: 44px; border-radius: 10px; border: 0; background: #FF051E; color: #FFFFFF; font-family: inherit; font-size: 15px; font-weight: 700")}>
-                    1
-                  </button>
+                  {(v.pag?.items || []).map((pg, pg_i) => (
+                    <Fragment key={pg_i}>
+                      {" "}
+                      {pg?.elipsis ? (
+                        <>
+                          <span aria-hidden="true" style={sx("display: inline-flex; align-items: center; padding: 0 4px; font-weight: 700")}>
+                            …
+                          </span>
+                        </>
+                      ) : null}
+                      {" "}
+                      {pg?.numero ? (
+                        <>
+                          <button type="button" onClick={pg?.ir} aria-current={pg?.actual} aria-label={pg?.etiqueta} style={sx(pg?.estilo)}>
+                            {pg?.n}
+                          </button>
+                        </>
+                      ) : null}
+                      {" "}
+                    </Fragment>
+                  ))}
                   {" "}
-                  <button type="button" style={sx("min-width: 44px; min-height: 44px; border-radius: 10px; border: 1px solid #F1E4D3; background: #FFFFFF; color: #8A1428; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer")}>
-                    2
-                  </button>
-                  {" "}
-                  <button type="button" style={sx("min-width: 44px; min-height: 44px; border-radius: 10px; border: 1px solid #F1E4D3; background: #FFFFFF; color: #8A1428; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer")}>
-                    3
-                  </button>
-                  {" "}
-                  <button type="button" style={sx("min-width: 44px; min-height: 44px; border-radius: 10px; border: 1px solid #F1E4D3; background: #FFFFFF; color: #8A1428; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer")}>
-                    4
-                  </button>
-                  {" "}
-                  <button type="button" style={sx("min-width: 44px; min-height: 44px; border-radius: 10px; border: 1px solid #F1E4D3; background: #FFFFFF; color: #8A1428; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer")}>
-                    5
-                  </button>
-                  {" "}
-                  <button type="button" style={sx("min-height: 44px; padding: 0 14px; border-radius: 10px; border: 1px solid #8A1428; background: #FFFFFF; color: #8A1428; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer")}>
+                  <button type="button" onClick={v.pag?.siguiente} disabled={!!v.pag?.sinSiguiente} aria-label="Página siguiente" style={sx(v.pag?.estiloSiguiente)}>
                     Siguiente
                   </button>
                   {" "}
@@ -378,7 +447,7 @@ export default function Historial(props) {
             </section>
             {" "}
           </div>
-          <aside style={sx("flex: 1 1 340px; min-width: 0; display: flex; flex-direction: column; gap: 24px")}>
+          <aside data-guia="panel" style={sx("flex: 1 1 340px; min-width: 0; display: flex; flex-direction: column; gap: 24px")}>
             {" "}
             {v.confirmando ? (
               <>
@@ -443,7 +512,7 @@ export default function Historial(props) {
               </>
             ) : null}
             {" "}
-            <section aria-labelledby="t-como" className="como" style={sx("position: relative; overflow: hidden; border-radius: 18px; background: #FF051E; color: #FFFFFF; padding: 26px 28px")}>
+            <section data-guia="como" aria-labelledby="t-como" className="como" style={sx("position: relative; overflow: hidden; border-radius: 18px; background: #FF051E; color: #FFFFFF; padding: 26px 28px")}>
               {" "}
               <div aria-hidden="true" style={sx("position: absolute; left: 145px; bottom: -269px; width: 400px; height: 300px; border-radius: 50%; background: #FBF5EC")}></div>
               {" "}

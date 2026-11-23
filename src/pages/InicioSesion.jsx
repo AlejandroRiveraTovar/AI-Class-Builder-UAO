@@ -37,9 +37,10 @@ claveVisible: ver,
 claveOculta: !ver,
 textoOjo: ver ? 'Ocultar contraseña' : 'Mostrar contraseña',
 alternarClave: function () { self.setState({ ver: !self.state.ver }); },
+entrarCeedi: function () { try { window.localStorage.setItem('aicb-rol', 'ceedi'); } catch (e) { /* sin almacenamiento */ } },
 ingresar: function () {
 var cc = (self.state.correo || '').trim().toLowerCase();
-if (/^[^@\s]+@uao\.edu\.co$/.test(cc) && self.state.clave) { window.location.href = '#/mis-trayectorias'; }
+if (/^[^@\s]+@uao\.edu\.co$/.test(cc) && self.state.clave) { try { window.localStorage.setItem('aicb-rol', 'docente'); } catch (e) { /* sin almacenamiento */ } window.location.href = '#/mis-trayectorias'; }
 else { self.setState({ intento: true }); }
 }
 };
@@ -231,7 +232,7 @@ export default function InicioSesion(props) {
                 o
               </div>
               {" "}
-              <a href="#/mis-trayectorias" className="btn btn-sec">
+              <a href="#/ceedi/trayectorias" className="btn btn-sec" onClick={v.entrarCeedi}>
                 Continuar con Google
               </a>
               {" "}

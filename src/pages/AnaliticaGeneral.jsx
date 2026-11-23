@@ -10,7 +10,7 @@ constructor(props) {
 super(props);
 this.state = { menu: false, aviso: '' };
 }
-renderVals() {
+renderValsPagina() {
 var self = this;
 var datos = [
 { id: 'pdf', sigla: 'PDF', nombre: 'Reporte en PDF', uso: 'Para compartir e imprimir', fondo: '#FF051E', tinta: '#FFFFFF' },
@@ -32,6 +32,23 @@ elegir: function () { self.setState({ menu: false, aviso: 'Listo. La analítica 
 })
 };
 }
+
+renderVals() { return Object.assign({}, this.renderValsPagina(), this.usuarioVals()); }
+// rol:inicio
+usuarioVals() {
+var rol = 'docente';
+try { rol = window.localStorage.getItem('aicb-rol') === 'ceedi' ? 'ceedi' : 'docente'; } catch (e) { rol = 'docente'; }
+var ceedi = rol === 'ceedi';
+return {
+usrTrayHref: ceedi ? '#/ceedi/trayectorias' : '#/mis-trayectorias',
+usrTrayTexto: ceedi ? 'Trayectorias' : 'Mis trayectorias',
+usrPerfilHref: ceedi ? '#/ceedi/perfil' : '#/perfil',
+usrNombre: ceedi ? 'Laura Gómez' : 'Juan Martínez',
+usrRol: ceedi ? 'Colaboradora CEEDi' : 'Docente UAO',
+usrIni: ceedi ? 'LG' : 'JM'
+};
+}
+// rol:fin
 }
 
 export default function AnaliticaGeneral(props) {
@@ -51,7 +68,7 @@ export default function AnaliticaGeneral(props) {
         {" "}
         <main id="arriba" style={sx("flex: 999 1 560px; min-width: 0; box-sizing: border-box; padding: 36px clamp(16px, 4vw, 48px) 56px; display: flex; flex-direction: column; gap: 28px")}>
           {" "}
-          <div style={sx("display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px")}>
+          <div data-guia="filtros" style={sx("display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px")}>
             {" "}
             <div style={sx("flex: 1 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 6px")}>
               {" "}
@@ -177,7 +194,7 @@ export default function AnaliticaGeneral(props) {
             </>
           ) : null}
           {" "}
-          <section aria-labelledby="t-kpi">
+          <section data-guia="indicadores" aria-labelledby="t-kpi">
             {" "}
             <h2 id="t-kpi" className="vh">
               Indicadores clave del periodo
@@ -278,7 +295,7 @@ export default function AnaliticaGeneral(props) {
             {" "}
           </section>
           {" "}
-          <div className="tres">
+          <div data-guia="estado" className="tres">
             {" "}
             <section className="caja" aria-labelledby="t-estado">
               {" "}
@@ -540,7 +557,7 @@ export default function AnaliticaGeneral(props) {
             {" "}
           </div>
           {" "}
-          <section aria-labelledby="t-cal" style={sx("display: flex; flex-direction: column; gap: 14px")}>
+          <section data-guia="calidad" aria-labelledby="t-cal" style={sx("display: flex; flex-direction: column; gap: 14px")}>
             {" "}
             <h2 id="t-cal" style={sx("margin: 0; font-size: 22px; font-weight: 800")}>
               Cómo se usa la IA
@@ -678,7 +695,7 @@ export default function AnaliticaGeneral(props) {
             {" "}
           </section>
           {" "}
-          <section className="caja" aria-labelledby="t-prog">
+          <section data-guia="programas" className="caja" aria-labelledby="t-prog">
             {" "}
             <div className="caja-cab">
               <h2 id="t-prog">
@@ -850,7 +867,7 @@ export default function AnaliticaGeneral(props) {
             {" "}
           </section>
           {" "}
-          <div className="dos">
+          <div data-guia="acompanamiento" className="dos">
             {" "}
             <section className="caja" aria-labelledby="t-alerta" style={sx("flex: 3 1 640px")}>
               {" "}

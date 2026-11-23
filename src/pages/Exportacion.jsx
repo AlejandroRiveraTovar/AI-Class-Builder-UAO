@@ -10,7 +10,7 @@ constructor(props) {
 super(props);
 this.state = { sel: { dc: true, ma: true, aa: true, ie: true, rv: true, gt: true, an: true, hv: true }, formato: 'pdf', listo: false };
 }
-renderVals() {
+renderValsPagina() {
 var self = this;
 var datos = [
 { id: 'dc', nombre: 'Competencias y resultados de aprendizaje', detalle: 'Competencias, niveles de desempeño y resultados de aprendizaje', origen: 'Contextualización', icono: ['M4 11l8-7 8 7', 'M6 10v10h12V10', 'M10 20v-5h4v5'] },
@@ -71,6 +71,23 @@ generar: function () { if (cuenta > 0) self.setState({ listo: true }); },
 botonEstilo: 'position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 0 28px; border-radius: 12px; border: 0; font-family: inherit; font-size: 17px; font-weight: 700; ' + (cuenta === 0 ? 'background: #FFFFFF; color: #A1434F; border: 1.5px solid #E3CFC2; cursor: not-allowed' : 'background: #FF051E; color: #FFFFFF; cursor: pointer')
 };
 }
+
+renderVals() { return Object.assign({}, this.renderValsPagina(), this.usuarioVals()); }
+// rol:inicio
+usuarioVals() {
+var rol = 'docente';
+try { rol = window.localStorage.getItem('aicb-rol') === 'ceedi' ? 'ceedi' : 'docente'; } catch (e) { rol = 'docente'; }
+var ceedi = rol === 'ceedi';
+return {
+usrTrayHref: ceedi ? '#/ceedi/trayectorias' : '#/mis-trayectorias',
+usrTrayTexto: ceedi ? 'Trayectorias' : 'Mis trayectorias',
+usrPerfilHref: ceedi ? '#/ceedi/perfil' : '#/perfil',
+usrNombre: ceedi ? 'Laura Gómez' : 'Juan Martínez',
+usrRol: ceedi ? 'Colaboradora CEEDi' : 'Docente UAO',
+usrIni: ceedi ? 'LG' : 'JM'
+};
+}
+// rol:fin
 }
 
 export default function Exportacion(props) {
@@ -96,8 +113,8 @@ export default function Exportacion(props) {
               <ol style={sx("list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 2px 10px; font-size: 14px; color: #8A1428")}>
                 {" "}
                 <li>
-                  <a href="#/mis-trayectorias" style={sx("display: inline-flex; align-items: center; min-height: 36px; font-weight: 600; color: #FF051E; text-underline-offset: 3px")}>
-                    Mis trayectorias
+                  <a href={v.usrTrayHref} style={sx("display: inline-flex; align-items: center; min-height: 36px; font-weight: 600; color: #FF051E; text-underline-offset: 3px")}>
+                    {v.usrTrayTexto}
                   </a>
                 </li>
                 {" "}
@@ -132,7 +149,7 @@ export default function Exportacion(props) {
             {" "}
           </div>
           {" "}
-          <section className="caja" aria-labelledby="t-componentes">
+          <section data-guia="componentes" className="caja" aria-labelledby="t-componentes">
             {" "}
             <div style={sx("display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px")}>
               {" "}
@@ -217,7 +234,7 @@ export default function Exportacion(props) {
           {" "}
           <div style={sx("display: flex; flex-wrap: wrap; align-items: stretch; gap: 24px")}>
             {" "}
-            <section className="caja" aria-labelledby="t-formato" style={sx("flex: 2 1 720px")}>
+            <section data-guia="formato" className="caja" aria-labelledby="t-formato" style={sx("flex: 2 1 720px")}>
               {" "}
               <div className="paso">
                 <span aria-hidden="true">
@@ -270,7 +287,7 @@ export default function Exportacion(props) {
               {" "}
             </section>
             {" "}
-            <section aria-labelledby="t-descarga" style={sx("flex: 1 1 380px; min-width: 0; box-sizing: border-box; position: relative; overflow: hidden; border-radius: 18px; background: #FF051E; color: #FFFFFF; padding: 24px 26px 0; display: flex; flex-direction: column; gap: 14px")}>
+            <section data-guia="descarga" aria-labelledby="t-descarga" style={sx("flex: 1 1 380px; min-width: 0; box-sizing: border-box; position: relative; overflow: hidden; border-radius: 18px; background: #FF051E; color: #FFFFFF; padding: 24px 26px 0; display: flex; flex-direction: column; gap: 14px")}>
               {" "}
               <div style={sx("display: flex; align-items: center; gap: 12px")}>
                 {" "}

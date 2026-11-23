@@ -6,7 +6,7 @@ import './CentroDiseno.css';
 
 // Lógica y datos de la página (estado local, sin servidor).
 class Logic extends PageLogic {
-renderVals() {
+renderValsPagina() {
 var datos = [
 { nombre: 'Diseño microcurricular UAO', texto: 'Construye la matriz de alineación de actividades con metas, medios de evaluación y semanas.', fondo: '#8A1428', tinta: '#FBF5EC', icono: ['M12.5 8a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0', 'M3 20c0-3.3 2.7-6 6-6', 'M14 20l1-3 4.5-4.5 2 2L17 19z'], enCurso: true, etapa: 5, etapas: 6, href: '#/asistentes/diseno-microcurricular' },
 { nombre: 'Diseña UAO', texto: 'Profundiza cada actividad de aprendizaje con el modelo Canvas.', fondo: '#FF836C', tinta: '#8A1428', icono: ['M6 4h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z', 'M4 10h16', 'M10 10v10'], href: '#/asistentes/disena' },
@@ -40,6 +40,23 @@ boton: btnBase + (activo ? 'background: #FF051E; color: #FFFFFF' : 'background: 
 })
 };
 }
+
+renderVals() { return Object.assign({}, this.renderValsPagina(), this.usuarioVals()); }
+// rol:inicio
+usuarioVals() {
+var rol = 'docente';
+try { rol = window.localStorage.getItem('aicb-rol') === 'ceedi' ? 'ceedi' : 'docente'; } catch (e) { rol = 'docente'; }
+var ceedi = rol === 'ceedi';
+return {
+usrTrayHref: ceedi ? '#/ceedi/trayectorias' : '#/mis-trayectorias',
+usrTrayTexto: ceedi ? 'Trayectorias' : 'Mis trayectorias',
+usrPerfilHref: ceedi ? '#/ceedi/perfil' : '#/perfil',
+usrNombre: ceedi ? 'Laura Gómez' : 'Juan Martínez',
+usrRol: ceedi ? 'Colaboradora CEEDi' : 'Docente UAO',
+usrIni: ceedi ? 'LG' : 'JM'
+};
+}
+// rol:fin
 }
 
 export default function CentroDiseno(props) {
@@ -65,8 +82,8 @@ export default function CentroDiseno(props) {
               <ol style={sx("list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 2px 10px; font-size: 14px; color: #8A1428")}>
                 {" "}
                 <li>
-                  <a href="#/mis-trayectorias" style={sx("display: inline-flex; align-items: center; min-height: 36px; font-weight: 600; color: #FF051E; text-underline-offset: 3px")}>
-                    Mis trayectorias
+                  <a href={v.usrTrayHref} style={sx("display: inline-flex; align-items: center; min-height: 36px; font-weight: 600; color: #FF051E; text-underline-offset: 3px")}>
+                    {v.usrTrayTexto}
                   </a>
                 </li>
                 {" "}
@@ -103,7 +120,7 @@ export default function CentroDiseno(props) {
             {" "}
           </div>
           {" "}
-          <ol className="rejilla">
+          <ol data-guia="asistentes" className="rejilla">
             {" "}
             {(v.asistentes || []).map((a, a_i) => (
               <Fragment key={a_i}>
@@ -177,7 +194,7 @@ export default function CentroDiseno(props) {
               </Fragment>
             ))}
             {" "}
-            <li style={sx("position: relative; overflow: hidden; border-radius: 18px; background: #FF051E; color: #FFFFFF; padding: 26px; display: flex; flex-direction: column; gap: 14px")}>
+            <li data-guia="recomendacion" style={sx("position: relative; overflow: hidden; border-radius: 18px; background: #FF051E; color: #FFFFFF; padding: 26px; display: flex; flex-direction: column; gap: 14px")}>
               {" "}
               <div aria-hidden="true" style={sx("position: absolute; right: -110px; bottom: -220px; width: 340px; height: 300px; border-radius: 50%; background: #FBF5EC")}></div>
               {" "}

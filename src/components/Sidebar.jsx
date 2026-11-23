@@ -2,6 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 import { useNav } from './NavContext.js';
 import './Sidebar.css';
 
+// Datos de la persona según su rol (versión de demostración, sin servidor).
+const CUENTAS = {
+  docente: { iniciales: 'JM', nombre: 'Juan Martínez', rol: 'Docente UAO', perfil: '#/perfil' },
+  ceedi: { iniciales: 'LG', nombre: 'Laura Gómez', rol: 'Colaboradora CEEDi', perfil: '#/ceedi/perfil' },
+};
+
 const ENLACES = [
   {
     id: 'trayectorias',
@@ -49,7 +55,7 @@ const ICONO_SALIR = ['M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4', 'M16 17l5-5-5-5'
  * Botón de la cuenta con su menú: Configuración (Mi perfil) y Cerrar sesión (landing).
  * Se cierra al hacer clic fuera, al pulsar Escape o al elegir una opción.
  */
-function MenuCuenta({ activo }) {
+function MenuCuenta({ activo, cuenta }) {
   const [abierto, setAbierto] = useState(false);
   const ref = useRef(null);
 
@@ -76,7 +82,7 @@ function MenuCuenta({ activo }) {
     <div className={abierto ? 'usuario abierto' : 'usuario'} ref={ref}>
       {abierto ? (
         <div className="usuario-pop" id="menu-cuenta" aria-label="Opciones de la cuenta">
-          <a href="#/perfil" onClick={() => setAbierto(false)}>
+          <a href={cuenta.perfil} onClick={() => setAbierto(false)}>
             <Icono paths={ICONO_CONFIG} size={18} />
             Configuración
           </a>
@@ -90,16 +96,16 @@ function MenuCuenta({ activo }) {
       <button
         type="button"
         className={activo ? 'usuario-btn activo' : 'usuario-btn'}
-        aria-label="Menú de cuenta de Juan Martínez"
+        aria-label={`Menú de cuenta de ${cuenta.nombre}`}
         aria-expanded={abierto}
         aria-controls="menu-cuenta"
         title="Opciones de la cuenta"
         onClick={() => setAbierto((v) => !v)}
       >
-        <span className="usuario-av" aria-hidden="true">JM</span>
+        <span className="usuario-av" aria-hidden="true">{cuenta.iniciales}</span>
         <span className="usuario-txt">
-          <span className="usuario-nom">Juan Martínez</span>
-          <span className="usuario-rol">{activo ? 'Mi perfil' : 'Docente UAO'}</span>
+          <span className="usuario-nom">{cuenta.nombre}</span>
+          <span className="usuario-rol">{activo ? 'Mi perfil' : cuenta.rol}</span>
         </span>
         <span className="usuario-flecha">
           <Icono paths={['M6 15l6-6 6 6']} size={18} />
@@ -114,7 +120,11 @@ function MenuCuenta({ activo }) {
  * Queda fijo a la altura de la pantalla y se puede plegar.
  */
 export default function Sidebar({ active }) {
-  const { plegado, setPlegado } = useNav();
+  const { plegado, setPlegado, rol, abrirGuia } = useNav();
+  const cuenta = CUENTAS[rol] || CUENTAS.docente;
+  const enlaces = ENLACES.map((e) =>
+    e.id === 'trayectorias' && rol === 'ceedi' ? { ...e, texto: 'Trayectorias', href: '#/ceedi/trayectorias' } : e
+  );
 
   return (
     <>
@@ -137,8 +147,8 @@ export default function Sidebar({ active }) {
           </span>
         </a>
 
-        <nav aria-label="Principal" className="menu-nav">
-          {ENLACES.map((e) => (
+        <nav aria-label="Principal" className="menu-nav" data-guia="menu">
+          {enlaces.map((e) => (
             <a
               key={e.id}
               href={e.href}
@@ -152,6 +162,17 @@ export default function Sidebar({ active }) {
           ))}
         </nav>
 
+        <button
+          type="button"
+          className="nav-ayuda"
+          onClick={abrirGuia}
+          aria-label="Ayuda: ver la guía de esta página"
+          title="Ver la guía de esta página"
+        >
+          <Icono paths={['M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z', 'M9.6 9.4a2.5 2.5 0 0 1 4.85.85c0 1.65-2.45 2.2-2.45 3.75', 'M12 17.2h.01']} />
+          Ayuda
+        </button>
+
         <label htmlFor="nav-pleg" className="nav-pleg-btn" title="Plegar o desplegar el menú">
           <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <rect x="3" y="4" width="18" height="16" rx="2" />
@@ -161,7 +182,7 @@ export default function Sidebar({ active }) {
           {plegado ? 'Mostrar menú' : 'Ocultar menú'}
         </label>
 
-        <MenuCuenta activo={active === 'perfil'} />
+        <MenuCuenta activo={active === 'perfil'} cuenta={cuenta} />
       </aside>
     </>
   );

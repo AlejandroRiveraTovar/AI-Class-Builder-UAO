@@ -8,9 +8,9 @@ import './RecursosPlantillas.css';
 class Logic extends PageLogic {
 constructor(props) {
 super(props);
-this.state = { q: '', orden: 'uso' };
+this.state = { q: '', orden: 'uso', pagina: 1 };
 }
-renderVals() {
+renderValsPagina() {
 var self = this;
 var sellos = {
 XLSX: 'background: #8A1428; color: #FBF5EC',
@@ -26,26 +26,85 @@ var datos = [
 { nombre: 'Formato de programa de trayectoria', asistente: 'Diseño curricular', formato: 'DOCX', detalle: '[DESCRIPCIÓN]', uso: 9 },
 { nombre: 'Plantilla de guion audiovisual', asistente: 'Guiones técnicos', formato: 'DOCX', detalle: '[DESCRIPCIÓN]', uso: 6 },
 { nombre: 'Ficha de recurso visual', asistente: 'AUREA', formato: 'PPTX', detalle: '[DESCRIPCIÓN]', uso: 4 },
-{ nombre: 'Lista de chequeo de coherencia curricular', asistente: 'Diseño microcurricular', formato: 'PDF', detalle: '[DESCRIPCIÓN]', uso: 3 }
+{ nombre: 'Lista de chequeo de coherencia curricular', asistente: 'Diseño microcurricular', formato: 'PDF', detalle: '[DESCRIPCIÓN]', uso: 3 },
+{ nombre: 'Formato de contextualización de la trayectoria', asistente: 'Diseño curricular', formato: 'DOCX', detalle: 'Las 5 partes del formulario en un documento para diligenciar sin conexión.', uso: 2 },
+{ nombre: 'Guía de estrategias de aprendizaje activo', asistente: 'Diseña UAO', formato: 'PDF', detalle: 'Estrategias por tipo de conocimiento, con ejemplos para cada momento de la clase.', uso: 2 },
+{ nombre: 'Cuestionario de opción múltiple', asistente: 'Instrumentos de evaluación', formato: 'DOCX', detalle: 'Banco de preguntas con clave de respuestas y retroalimentación.', uso: 1 },
+{ nombre: 'Presentación institucional de curso', asistente: 'AUREA', formato: 'PPTX', detalle: 'Diapositivas con la identidad UAO para presentar el curso al estudiantado.', uso: 1 }
 ];
 var q = (this.state.q || '').toLowerCase();
 var filas = datos.filter(function (r) {
 return !q || (r.nombre + ' ' + r.asistente + ' ' + r.formato + ' ' + r.detalle).toLowerCase().indexOf(q) >= 0;
 }).slice().sort(function (a, b) {
 return self.state.orden === 'az' ? a.nombre.localeCompare(b.nombre, 'es') : b.uso - a.uso;
-}).map(function (r) {
+});
+var pag = this.paginador(filas.length, this.state.pagina, 8, 'pagina', { normal: '', activo: 'background: #FF051E; border-color: #FF051E; color: #FFFFFF; font-weight: 800', flecha: '', apagado: 'color: #C58A93; cursor: default' });
+filas = filas.slice(pag.inicio, pag.inicio + 8).map(function (r) {
 return Object.assign({}, r, { sello: 'flex: none; width: 52px; height: 52px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; ' + sellos[r.formato] });
 });
 return {
 q: this.state.q,
-buscar: function (e) { self.setState({ q: e.target.value }); },
+buscar: function (e) { self.setState({ q: e.target.value, pagina: 1 }); },
 orden: this.state.orden,
-ordenar: function (e) { self.setState({ orden: e.target.value }); },
+ordenar: function (e) { self.setState({ orden: e.target.value, pagina: 1 }); },
 filas: filas,
+pag: pag,
 cuenta: filas.length,
 vacio: filas.length === 0
 };
 }
+
+// paginacion:inicio
+paginador(total, pagina, porPagina, clave, estilos) {
+var self = this;
+var paginas = Math.max(1, Math.ceil(total / porPagina));
+var actual = Math.min(Math.max(1, pagina || 1), paginas);
+var ir = function (n) { return function () { var o = {}; o[clave] = n; self.setState(o); }; };
+var nums = [];
+if (paginas <= 7) { for (var i = 1; i <= paginas; i++) nums.push(i); }
+else {
+var a = Math.max(2, actual - 1), b = Math.min(paginas - 1, actual + 1);
+if (actual <= 3) { a = 2; b = 4; }
+if (actual >= paginas - 2) { a = paginas - 3; b = paginas - 1; }
+nums.push(1);
+if (a > 2) nums.push(0);
+for (var j = a; j <= b; j++) nums.push(j);
+if (b < paginas - 1) nums.push(0);
+nums.push(paginas);
+}
+return {
+actual: actual, paginas: paginas, total: total,
+inicio: (actual - 1) * porPagina,
+desde: total ? (actual - 1) * porPagina + 1 : 0,
+hasta: Math.min(total, actual * porPagina),
+sinAnterior: actual === 1, sinSiguiente: actual === paginas,
+estiloAnterior: actual === 1 ? estilos.apagado : estilos.flecha,
+estiloSiguiente: actual === paginas ? estilos.apagado : estilos.flecha,
+anterior: ir(Math.max(1, actual - 1)),
+siguiente: ir(Math.min(paginas, actual + 1)),
+items: nums.map(function (n) {
+return { elipsis: n === 0, numero: n !== 0, n: n, actual: n === actual ? 'page' : 'false', etiqueta: 'Página ' + n, ir: ir(n), estilo: n === actual ? estilos.activo : estilos.normal };
+})
+};
+}
+// paginacion:fin
+
+renderVals() { return Object.assign({}, this.renderValsPagina(), this.usuarioVals()); }
+// rol:inicio
+usuarioVals() {
+var rol = 'docente';
+try { rol = window.localStorage.getItem('aicb-rol') === 'ceedi' ? 'ceedi' : 'docente'; } catch (e) { rol = 'docente'; }
+var ceedi = rol === 'ceedi';
+return {
+usrTrayHref: ceedi ? '#/ceedi/trayectorias' : '#/mis-trayectorias',
+usrTrayTexto: ceedi ? 'Trayectorias' : 'Mis trayectorias',
+usrPerfilHref: ceedi ? '#/ceedi/perfil' : '#/perfil',
+usrNombre: ceedi ? 'Laura Gómez' : 'Juan Martínez',
+usrRol: ceedi ? 'Colaboradora CEEDi' : 'Docente UAO',
+usrIni: ceedi ? 'LG' : 'JM'
+};
+}
+// rol:fin
 }
 
 export default function RecursosPlantillas(props) {
@@ -132,7 +191,7 @@ export default function RecursosPlantillas(props) {
             {" "}
           </header>
           {" "}
-          <div style={sx("display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px")}>
+          <div data-guia="busqueda" style={sx("display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px")}>
             {" "}
             <label style={sx("flex: 1 1 380px; min-width: 0; display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 14px; border-radius: 12px; background: #FFFFFF; border: 1.5px solid #F1E4D3")}>
               {" "}
@@ -164,7 +223,7 @@ export default function RecursosPlantillas(props) {
             {" "}
           </div>
           {" "}
-          <div style={sx("background: #FFFFFF; border-radius: 18px; overflow: hidden")}>
+          <div data-guia="tabla" style={sx("background: #FFFFFF; border-radius: 18px; overflow: hidden")}>
             {" "}
             <div style={sx("overflow-x: auto")}>
               {" "}
@@ -251,30 +310,44 @@ export default function RecursosPlantillas(props) {
             <p style={sx("margin: 0; font-size: 15px")}>
               Mostrando{" "}
               <strong>
-                {v.cuenta}
+                {v.pag?.desde}–{v.pag?.hasta}
               </strong>
               {" "}de{" "}
               <strong>
-                12
+                {v.pag?.total}
               </strong>
               {" "}plantillas
             </p>
             {" "}
             <nav aria-label="Paginación" style={sx("display: flex; gap: 6px")}>
               {" "}
-              <button type="button" className="pag" disabled aria-label="Página anterior" style={sx("color: #C58A93")}>
+              <button type="button" className="pag" onClick={v.pag?.anterior} disabled={!!v.pag?.sinAnterior} aria-label="Página anterior" style={sx(v.pag?.estiloAnterior)}>
                 ‹
               </button>
               {" "}
-              <button type="button" className="pag" aria-current="page" style={sx("background: #FF051E; border-color: #FF051E; color: #FFFFFF; font-weight: 800")}>
-                1
-              </button>
+              {(v.pag?.items || []).map((pg, pg_i) => (
+                <Fragment key={pg_i}>
+                  {" "}
+                  {pg?.elipsis ? (
+                    <>
+                      <span aria-hidden="true" style={sx("display: inline-flex; align-items: center; padding: 0 4px; font-weight: 700")}>
+                        …
+                      </span>
+                    </>
+                  ) : null}
+                  {" "}
+                  {pg?.numero ? (
+                    <>
+                      <button type="button" className="pag" onClick={pg?.ir} aria-current={pg?.actual} aria-label={pg?.etiqueta} style={sx(pg?.estilo)}>
+                        {pg?.n}
+                      </button>
+                    </>
+                  ) : null}
+                  {" "}
+                </Fragment>
+              ))}
               {" "}
-              <button type="button" className="pag">
-                2
-              </button>
-              {" "}
-              <button type="button" className="pag" aria-label="Página siguiente">
+              <button type="button" className="pag" onClick={v.pag?.siguiente} disabled={!!v.pag?.sinSiguiente} aria-label="Página siguiente" style={sx(v.pag?.estiloSiguiente)}>
                 ›
               </button>
               {" "}

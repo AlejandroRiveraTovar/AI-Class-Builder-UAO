@@ -10,7 +10,7 @@ constructor(props) {
 super(props);
 this.state = { q: '' };
 }
-renderVals() {
+renderValsPagina() {
 var self = this;
 var tile = function (bg, ink) { return 'flex: none; width: 46px; height: 46px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; background: ' + bg + '; color: ' + ink; };
 var libro = ['M4 5h6a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H4z', 'M20 5h-6a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h6z'];
@@ -32,6 +32,23 @@ var crai = [
 ];
 return { ceedi: ceedi, crai: crai };
 }
+
+renderVals() { return Object.assign({}, this.renderValsPagina(), this.usuarioVals()); }
+// rol:inicio
+usuarioVals() {
+var rol = 'docente';
+try { rol = window.localStorage.getItem('aicb-rol') === 'ceedi' ? 'ceedi' : 'docente'; } catch (e) { rol = 'docente'; }
+var ceedi = rol === 'ceedi';
+return {
+usrTrayHref: ceedi ? '#/ceedi/trayectorias' : '#/mis-trayectorias',
+usrTrayTexto: ceedi ? 'Trayectorias' : 'Mis trayectorias',
+usrPerfilHref: ceedi ? '#/ceedi/perfil' : '#/perfil',
+usrNombre: ceedi ? 'Laura Gómez' : 'Juan Martínez',
+usrRol: ceedi ? 'Colaboradora CEEDi' : 'Docente UAO',
+usrIni: ceedi ? 'LG' : 'JM'
+};
+}
+// rol:fin
 }
 
 export default function Recursos(props) {
@@ -76,7 +93,7 @@ export default function Recursos(props) {
             {" "}
           </div>
           {" "}
-          <section className="bloque" aria-labelledby="t-ceedi">
+          <section data-guia="ceedi" className="bloque" aria-labelledby="t-ceedi">
             {" "}
             <div className="bloque-cab">
               {" "}
@@ -165,7 +182,7 @@ export default function Recursos(props) {
             {" "}
           </section>
           {" "}
-          <section className="bloque" aria-labelledby="t-crai">
+          <section data-guia="crai" className="bloque" aria-labelledby="t-crai">
             {" "}
             <div className="bloque-cab">
               {" "}
